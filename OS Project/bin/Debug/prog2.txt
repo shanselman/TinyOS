@@ -1,0 +1,10 @@
+11	r8		;Print r8
+6	r1 $10	;Move 10 into r1
+6	r2 $6	;Move 6 into r2
+6	r3 $25	;Move 25 intno r3
+23	r1		;Acquire lock in r1 (currently 10)
+11 r3		;Print r3 (currently 25)
+24 r1		;Release r4 (currently 10)
+25 r3		;Sleep r3 (currently 25)
+11 r3		;Print r3 (currently 25)
+27			;Exit

@@ -1,0 +1,14 @@
+11	r8		;Print r8
+6	r1 $10	;Move 10 into r1
+23	r1		;Acquire Lock in r1 (currently 10)
+2	r1 $1	;Addi 1 to r1
+25	r1		;Sleep r1 (currently 25)
+23	r1		;Acquire r1 (currently 11, INVALID -> NOOP)
+2	r1 $1	;Addi 1 to r1
+25	r1		;Sleep r1 (currently 12)
+23  r1		;Acquire r1 (currently 12, INVALUD -> NOOP)
+11	r1		;Print r1 (currently 12)
+6	r2 $100	;Move 100 into r2
+25	r2		;Sleep r2 (currently 100)
+11	r2		;Print r2
+27			;Exit

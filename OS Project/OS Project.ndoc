@@ -1,0 +1,60 @@
+<project>
+    <assemblies>
+        <assembly location="C:\Documents and Settings\SHanselm\Desktop\OIT Classes\CST352\OS Project\bin\Debug\OS.exe" documentation="C:\Documents and Settings\SHanselm\Desktop\OIT Classes\CST352\OS Project\bin\Debug\os.xml" />
+    </assemblies>
+    <documenters>
+        <documenter name="JavaDoc">
+            <property name="Title" value="NDoc" />
+            <property name="OutputDirectory" value=".\docs\JavaDoc\" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+        </documenter>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\" />
+            <property name="HtmlHelpName" value="Scott Hanselman's Tiny OS and CPU" />
+            <property name="HtmlHelpCompilerFilename" value="C:\Program Files\HTML Help Workshop\hhc.exe" />
+            <property name="IncludeFavorites" value="False" />
+            <property name="Title" value="Scott Hanselman's Tiny Virtual CPU and OS" />
+            <property name="SplitTOCs" value="False" />
+            <property name="DefaulTOC" value="" />
+            <property name="ShowVisualBasic" value="True" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="True" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="True" />
+            <property name="DocumentEmptyNamespaces" value="True" />
+            <property name="IncludeAssemblyVersion" value="True" />
+            <property name="CopyrightText" value="Copyright (c) 2002 Scott Hanselman" />
+            <property name="CopyrightHref" value="http://www.hanselman.com" />
+        </documenter>
+        <documenter name="XML">
+            <property name="OutputFile" value=".\docs\doc.xml" />
+            <property name="ShowMissingSummaries" value="False" />
+            <property name="ShowMissingRemarks" value="False" />
+            <property name="ShowMissingParams" value="False" />
+            <property name="ShowMissingReturns" value="False" />
+            <property name="ShowMissingValues" value="False" />
+            <property name="DocumentInternals" value="False" />
+            <property name="DocumentProtected" value="True" />
+            <property name="DocumentPrivates" value="False" />
+            <property name="DocumentEmptyNamespaces" value="False" />
+            <property name="IncludeAssemblyVersion" value="False" />
+            <property name="CopyrightText" value="" />
+            <property name="CopyrightHref" value="" />
+        </documenter>
+    </documenters>
+</project>

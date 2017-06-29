@@ -1,0 +1,10 @@
+call testAllocAndFree.bat
+call testCalls.bat
+call testEvents.bat
+call testJumps.bat
+call testLocks.bat
+call testMemoryProtection.bat
+call testRegisters.bat
+call testSharedMem.bat
+call testStack.bat
+call testMulti.bat

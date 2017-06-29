@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<RMS:MODEL xmlns:RMS="http://www.rational.com/products/xde"  xmlns:dt="http://www.rational.com/products/xde"  xmlns:UML="http://www.rational.com/products/xde"  id="mdeRIhJuz0CMVz0diVAW+w"  unitPolicy="3" >
+<RMS:METAMODEL name="UML 7.0"  id="SRu5vy3weEOOfUkO9LWyYQ"  version="7.0.201.2200"  server="1.1.201.2200"  format="0.27" />
+<RMS:ROOT>
+<UML:Model id="XG+t6OWJNUWWkMnsyxV/qQ" >
+<UML:Name>WorkspaceModel</UML:Name>
+<UML:Kind>WORKSPACE</UML:Kind>
+<UML:Workspace>
+<UML:Workspace id="95MUbuTdI0W2g5C6nwbOGQ" >
+<UML:DiagramView reserve="2" >
+<UML:DiagramView id="oeNQp6IwKUaCNXD4PMgrWA" >
+<UML:Extent>(0,0)</UML:Extent>
+<UML:Position>(0,0)</UML:Position>
+<UML:Name>{EBFE2517-6B50-4D42-AB43-74D04990AA5C}</UML:Name>
+<UML:ViewportX>2218</UML:ViewportX>
+<UML:ViewportY>1238</UML:ViewportY>
+<UML:WindowState>Closed</UML:WindowState>
+<UML:Zoom>100</UML:Zoom>
+</UML:DiagramView>
+<UML:DiagramView id="3Us9D/I2ZEGyEGvJVhNfog" >
+<UML:Extent>(0,0)</UML:Extent>
+<UML:Position>(0,0)</UML:Position>
+<UML:Name>{AB35C6A2-2125-426E-827E-27F328E62BFA}</UML:Name>
+<UML:WindowState>Closed</UML:WindowState>
+<UML:Zoom>100</UML:Zoom>
+</UML:DiagramView>
+</UML:DiagramView>
+</UML:Workspace>
+</UML:Workspace>
+</UML:Model>
+</RMS:ROOT>
+</RMS:MODEL>

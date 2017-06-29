@@ -1,0 +1,10 @@
+11	r8		;Print r8
+6	r1 $10	;Move 10 into r1
+6	r2 $11	;Move 11 into r2
+6	r3 $0	;Move 0 into r3
+23	r1		;Acquire lock in r1 (currently lock 10)
+11	r2		;Print r2
+25	r3		;Sleep r3 (current 0, will sleep forever)
+11	r3		;Print r3
+24	r1		;Release r1
+27			;Exit

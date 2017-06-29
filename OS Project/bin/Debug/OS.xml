@@ -1,0 +1,1983 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OS</name>
+    </assembly>
+    <members>
+        <member name="T:Hanselman.CST352.CPU">
+            <summary>
+            CPU is never instanciated, but is "always" there...like a real CPU. :)  It holds <see cref="F:Hanselman.CST352.CPU.physicalMemory"/> 
+            and the <see cref="F:Hanselman.CST352.CPU.registers"/>.  It also provides a mapping from <see cref="T:Hanselman.CST352.Instruction"/>s to SystemCalls in 
+            the <see cref="T:Hanselman.CST352.OS"/>.  
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.pageSize">
+            <summary>
+            The size of a memory page for this system.  This should be a multiple of 4.  Small sizes (like 4) will
+            cause the system to thrash and page often.  16 is a nice compromise for such a small system.  
+            64 might also work well.  This probably won't change, but it is nice to be able to.  
+            This is loaded from Configuration on a call to <see cref="M:Hanselman.CST352.CPU.initPhysicalMemory(System.UInt32)"/>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.clock">
+            <summary>
+            The clock for the system.  This increments as we execute each <see cref="T:Hanselman.CST352.Instruction"/>.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.theOS">
+            <summary>
+            The CPU's reference to the <see cref="T:Hanselman.CST352.OS"/>.  This is set by the <see cref="T:Hanselman.CST352.EntryPoint"/>.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.initPhysicalMemory(System.UInt32)">
+            <summary>
+            Initialized our <see cref="F:Hanselman.CST352.CPU.physicalMemory"/> array that represents physical memory.  Should only be called once.
+            </summary>
+            <param name="memorySize">The size of physical memory</param>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.physicalMemory">
+            <summary>
+            Here is the actual array of bytes that contains the physical memory for this CPU.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.registers">
+            <summary>
+            We have 10 registers.  R11 is the <see cref="P:Hanselman.CST352.CPU.ip"/>, and we don't use R0.  R10 is the <see cref="P:Hanselman.CST352.CPU.sp"/>.  So, that's 1 to 10, and 11.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.CPU.bitFlagRegisters">
+            <summary>
+            We have a Sign Flag and a Zero Flag in a <see cref="T:System.Collections.BitArray"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.executeNextOpCode">
+            <summary>
+            Takes the process id from the <see cref="F:Hanselman.CST352.OS.currentProcess"/> and the CPU's <see cref="P:Hanselman.CST352.CPU.ip"/> and 
+            gets the next <see cref="T:Hanselman.CST352.Instruction"/> from memory.  The <see cref="T:Hanselman.CST352.InstructionType"/> translates 
+            via an array of <see cref="T:Hanselman.CST352.SystemCall"/>s and retrives a <see cref="T:System.Delegate"/> from <see cref="M:Hanselman.CST352.CPU.opCodeToSysCall(Hanselman.CST352.InstructionType)"/>
+            and calls it.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.opCodeToSysCall(Hanselman.CST352.InstructionType)">
+            <summary>
+            The <see cref="T:Hanselman.CST352.InstructionType"/> translates via an array of <see cref="T:Hanselman.CST352.SystemCall"/>s and 
+            retrives a <see cref="T:System.Delegate"/> and calls it.
+            </summary>
+            <param name="opCode">An <see cref="T:Hanselman.CST352.InstructionType"/> enum that maps to a <see cref="T:Hanselman.CST352.SystemCall"/></param>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.DumpRegisters">
+            <summary>
+            Dumps the values of <see cref="F:Hanselman.CST352.CPU.registers"/> as the <see cref="T:Hanselman.CST352.CPU"/> currently sees it.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.DumpInstruction">
+            <summary>
+            Dumps the current <see cref="T:Hanselman.CST352.Instruction"/> for the current process at the current <see cref="P:Hanselman.CST352.CPU.ip"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.DumpPhysicalMemory">
+            <summary>
+            Dumps the content of the CPU's <see cref="F:Hanselman.CST352.CPU.physicalMemory"/> array.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.BytesToUInt(System.Byte[])">
+            <summary>
+            Pins down a section of memory and converts an array of bytes into an unsigned int (<see cref="T:System.UInt32"/>)
+            </summary>
+            <param name="BytesIn">array of bytes to convert</param>
+            <returns>value of bytes as a uint</returns>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.UIntToBytes(System.UInt32)">
+            <summary>
+            Pins down a section of memory and converts an unsigned int into an array of (<see cref="T:System.Byte"/>)s
+            </summary>
+            <param name="UIntIn">the uint to convert</param>
+            <returns>uint containing the value of the uint</returns>
+        </member>
+        <member name="M:Hanselman.CST352.CPU.UtilRoundToBoundary(System.UInt32,System.UInt32)">
+            <summary>
+            Utility function to round any number to any arbirary boundary
+            </summary>
+            <param name="number">number to be rounded</param>
+            <param name="boundary">boundary multiplier</param>
+            <returns>new rounded number</returns>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.sf">
+            <summary>
+            Public get/set accessor for the Sign Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.zf">
+            <summary>
+            Public get/set accessor for the Zero Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.sp">
+            <summary>
+            Public get/set accessor for Stack Pointer
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.ip">
+            <summary>
+            Public get/set access for the CPU's Instruction Pointer
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.EntryPoint">
+            <summary>
+            "Bootstraps" the system by creating an <see cref="T:Hanselman.CST352.OS"/>, setting the size of the <see cref="T:Hanselman.CST352.CPU"/>'s memory, 
+            and loading each <see cref="T:Hanselman.CST352.Program"/> into memory.  Then, for each <see cref="T:Hanselman.CST352.Program"/> we create a 
+            <see cref="T:Hanselman.CST352.Process"/>.  Then we start everything by calling <see cref="M:Hanselman.CST352.OS.execute"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.EntryPoint.Main(System.String[])">
+            <summary>
+            The entry point for the virtual OS
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.EntryPoint.PrintInstructions">
+            <summary>
+            Prints the static instructions on how to invoke from the command line
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.EntryPoint.PrintHeader">
+            <summary>
+            Prints the static informatonal header
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.Instruction">
+            <summary>
+            Represents a single line in a program, consisting of an <see cref="F:Hanselman.CST352.Instruction.OpCode"/> 
+            and one or two optional parameters.  An instruction can parse a raw instruction from a test file.
+            Tge instruction is then loaded into an <see cref="T:Hanselman.CST352.InstructionCollection"/> which is a member of
+            <see cref="T:Hanselman.CST352.Program"/>.  The <see cref="T:Hanselman.CST352.InstructionCollection"/> is translated into bytes that are 
+            loaded into the processes memory space.  It's never used again, but it's a neat overly object oriented
+            construct that simplified the coding of the creation of a <see cref="T:Hanselman.CST352.Program"/> and complicated the 
+            running of the whole system.  It was worth it though.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Instruction.ToString">
+            <summary>
+            Overridden method for pretty printing of Instructions
+            </summary>
+            <returns>A formatted string representing an Instruction</returns>
+        </member>
+        <member name="F:Hanselman.CST352.Instruction.OpCode">
+            <summary>
+            The OpCode for this Instruction
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Instruction.Param1">
+            <summary>
+            The first parameter to the opCode.  May be a Constant or a Register value, or not used at all
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Instruction.Param2">
+            <summary>
+            The second parameter to the opCode.  May be a Constant or a Register value, or not used at all
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Instruction.#ctor(System.String)">
+            <summary>
+            Public constructor for an Instruction
+            </summary>
+            <param name="rawInstruction">A raw string from a Program File.</param>
+            <example>Any one of the following lines is a valid rawInstruction
+            <pre>
+             1   r1          ; incr r1
+             2   r6, $16     ; add 16 to r6
+             26  r6          ; setPriority to r6
+             2   r2, $5      ; increment r2 by 5
+             3   r1, r2      ; add 1 and 2 and the result goes in 1
+             2   r2, $5      ; increment r2 by 5
+             6   r3, $99     ; move 99 into r3
+             7   r4, r3      ; move r3 into r4
+             11  r4          ; print r4
+             27              ; this is exit.
+            </pre>
+            </example>
+        </member>
+        <member name="T:Hanselman.CST352.InstructionType">
+            <summary>
+            This enum provides an easy conversion between numerical opCodes like "2" and text 
+            and easy to remember consts like "Addi"
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Noop">
+            <summary>
+            No op
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Incr">
+            <summary>
+            Increments register
+            <pre>
+            1 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Addi">
+            <summary>
+             Adds constant 1 to register 1
+            <pre>
+            2 r1, $1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Addr">
+            <summary>
+            Adds r2 to r1 and stores the value in r1
+            <pre>
+            3 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Pushr">
+            <summary>
+            Pushes contents of register 1 onto stack
+            <pre>
+            4 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Pushi">
+            <summary>
+            Pushes constant 1 onto stack
+            <pre>
+            5 $1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Movi">
+            <summary>
+            Moves constant 1 into register 1
+            <pre>
+            6 r1, $1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Movr">
+            <summary>
+            Moves contents of register2 into register 1
+            <pre>
+            7 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Movmr">
+            <summary>
+            Moves contents of memory pointed to register 2 into register 1
+            <pre>
+            8 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Movrm">
+            <summary>
+            Moves contents of register 2 into memory pointed to by register 1
+            <pre>
+            9 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Movmm">
+            <summary>
+            Moves contents of memory pointed to by register 2 into memory pointed to by register 1
+            <pre>
+            10 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Printr">
+            <summary>
+            Prints out contents of register 1
+            <pre>
+            11 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Printm">
+            <summary>
+            Prints out contents of memory pointed to by register 1
+            <pre>
+            12 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Jmp">
+            <summary>
+            Control transfers to the instruction whose address is r1 bytes relative to the current instruction. 
+            r1 may be negative.
+            <pre>
+            13 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Cmpi">
+            <summary>
+            Compare contents of r1 with 1.  If r1 &lt; 9 set sign flag.  If r1 &gt; 9 clear sign flag.
+            If r1 == 9 set zero flag.
+            <pre>
+            14 r1, $9
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Cmpr">
+            <summary>
+            Compare contents of r1 with r2.  If r1 &lt; r2 set sign flag.  If r1 &gt; r2 clear sign flag.
+            If r1 == r2 set zero flag.
+            <pre>
+            15 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Jlt">
+            <summary>
+            If the sign flag is set, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            16 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Jgt">
+            <summary>
+            If the sign flag is clear, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            17 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Je">
+            <summary>
+            If the zero flag is set, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            18 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Call">
+            <summary>
+            Call the procedure at offset r1 bytes from the current instrucion.  
+            The address of the next instruction to excetute after a return is pushed on the stack
+            <pre>
+            19 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Callm">
+            <summary>
+            Call the procedure at offset of the bytes in memory pointed by r1 from the current instrucion.  
+            The address of the next instruction to excetute after a return is pushed on the stack
+            <pre>
+            20 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Ret">
+            <summary>
+            Pop the return address from the stack and transfer control to this instruction
+            <pre>
+            21
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Alloc">
+            <summary>
+            Allocate memory of the size equal to r1 bytes and return the address of the new memory in r2.  
+            If failed, r2 is cleared to 0.
+            <pre>
+            22 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.AcquireLock">
+            <summary>
+            Acquire the OS lock whose # is provided in register r1.  
+            Icf the lock is not held by the current process
+            the operation is a no-op
+            <pre>
+            23 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.ReleaseLock">
+            <summary>
+            Release the OS lock whose # is provided in register r1.  
+            Another process or the idle process 
+            must be scheduled at this point.  
+            if the lock is not held by the current process, 
+            the instruction is a no-op
+            <pre>
+            24 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Sleep">
+            <summary>
+            Sleep the # of clock cycles as indicated in r1.  
+            Another process or the idle process 
+            must be scheduled at this point.  
+            If the time to sleep is 0, the process sleeps infinitely
+            <pre>
+            25 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.SetPriority">
+            <summary>
+            Set the priority of the current process to the value
+            in register r1
+            <pre>
+            26 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Exit">
+            <summary>
+            This opcode causes an exit and the process's memory to be unloaded.  
+            Another process or the idle process must now be scheduled
+            <pre>
+            27
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.FreeMemory">
+            <summary>
+            Free the memory allocated whose address is in r1
+            <pre>
+            28 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.MapSharedMem">
+            <summary>
+            Map the shared memory region identified by r1 and return the start address in r2
+            <pre>
+            29 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.SignalEvent">
+            <summary>
+            Signal the event indicated by the value in register r1
+            <pre>
+            30 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.WaitEvent">
+            <summary>
+            Wait for the event in register r1 to be triggered resulting in a context-switch
+            <pre>
+            31 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Input">
+            <summary>
+            Read the next 32-bit value into register r1
+            <pre>
+            32 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.MemoryClear">
+            <summary>
+            set the bytes starting at address r1 of length r2 to zero
+            <pre>
+            33 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.TerminateProcess">
+            <summary>
+            Terminate the process whose id is in the register r1
+            <pre>
+            34 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Popr">
+            <summary>
+            Pop the contents at the top of the stack into register r1 
+            <pre>
+            35 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.InstructionType.Popm">
+            <summary>
+            Pop the contents at the top of the stack into the memory pointed to by register r1 
+            <pre>
+            36 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.InstructionCollection">
+            <summary>
+                  A collection that stores <see cref="T:Hanselman.CST352.Instruction"/> objects.
+            </summary>
+            <seealso cref="T:Hanselman.CST352.InstructionCollection"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.#ctor">
+            <summary>
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.#ctor(Hanselman.CST352.InstructionCollection)">
+            <summary>
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/> based on another <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+            </summary>
+            <param name="value">
+                  A <see cref="T:Hanselman.CST352.InstructionCollection"/> from which the contents are copied
+            </param>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.#ctor(Hanselman.CST352.Instruction[])">
+            <summary>
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/> containing any array of <see cref="T:Hanselman.CST352.Instruction"/> objects.
+            </summary>
+            <param name="value">
+                  A array of <see cref="T:Hanselman.CST352.Instruction"/> objects with which to intialize the collection
+            </param>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)">
+            <summary>
+               Adds a <see cref="T:Hanselman.CST352.Instruction"/> with the specified value to the 
+               <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to add.</param>
+            <returns>
+               The index at which the new element was inserted.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.Instruction[])"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.Instruction[])">
+            <summary>
+            Copies the elements of an array to the end of the <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+            </summary>
+            <param name="value">
+               An array of type <see cref="T:Hanselman.CST352.Instruction"/> containing the objects to add to the collection.
+            </param>
+            <returns>
+              None.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.InstructionCollection)">
+            <summary>
+                
+                  Adds the contents of another <see cref="T:Hanselman.CST352.InstructionCollection"/> to the end of the collection.
+               
+            </summary>
+            <param name="value">
+               A <see cref="T:Hanselman.CST352.InstructionCollection"/> containing the objects to add to the collection.
+            </param>
+            <returns>
+              None.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.Contains(Hanselman.CST352.Instruction)">
+            <summary>
+            Gets a value indicating whether the 
+               <see cref="T:Hanselman.CST352.InstructionCollection"/> contains the specified <see cref="T:Hanselman.CST352.Instruction"/>.
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to locate.</param>
+            <returns>
+            <see langword="true"/> if the <see cref="T:Hanselman.CST352.Instruction"/> is contained in the collection; 
+              otherwise, <see langword="false"/>.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.IndexOf(Hanselman.CST352.Instruction)"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.CopyTo(Hanselman.CST352.Instruction[],System.Int32)">
+            <summary>
+            Copies the <see cref="T:Hanselman.CST352.InstructionCollection"/> values to a one-dimensional <see cref="T:System.Array"/> instance at the 
+               specified index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the values copied from <see cref="T:Hanselman.CST352.InstructionCollection"/> .</param>
+            <param name="index">The index in <paramref name="array"/> where copying begins.</param>
+            <returns>
+              None.
+            </returns>
+            <exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional. -or- The number of elements in the <see cref="T:Hanselman.CST352.InstructionCollection"/> is greater than the available space between <paramref name="arrayIndex"/> and the end of <paramref name="array"/>.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than <paramref name="array"/>'s lowbound. </exception>
+            <seealso cref="T:System.Array"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.IndexOf(Hanselman.CST352.Instruction)">
+            <summary>
+               Returns the index of a <see cref="T:Hanselman.CST352.Instruction"/> in 
+                  the <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to locate.</param>
+            <returns>
+            The index of the <see cref="T:Hanselman.CST352.Instruction"/> of <paramref name="value"/> in the 
+            <see cref="T:Hanselman.CST352.InstructionCollection"/>, if found; otherwise, -1.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.Contains(Hanselman.CST352.Instruction)"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.Insert(System.Int32,Hanselman.CST352.Instruction)">
+            <summary>
+            Inserts a <see cref="T:Hanselman.CST352.Instruction"/> into the <see cref="T:Hanselman.CST352.InstructionCollection"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index where <paramref name="value"/> should be inserted.</param>
+            <param name=" value">The <see cref="T:Hanselman.CST352.Instruction"/> to insert.</param>
+            <returns>None.</returns>
+            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.GetEnumerator">
+            <summary>
+               Returns an enumerator that can iterate through 
+                  the <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+            </summary>
+            <returns>None.</returns>
+            <seealso cref="T:System.Collections.IEnumerator"/>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.Remove(Hanselman.CST352.Instruction)">
+            <summary>
+                Removes a specific <see cref="T:Hanselman.CST352.Instruction"/> from the 
+               <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to remove from the <see cref="T:Hanselman.CST352.InstructionCollection"/> .</param>
+            <returns>None.</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.Item(System.Int32)">
+            <summary>
+            Represents the entry at the specified index of the <see cref="T:Hanselman.CST352.Instruction"/>.
+            </summary>
+            <param name="index">The zero-based index of the entry to locate in the collection.</param>
+            <value>
+               The entry at the specified index of the collection.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is outside the valid range of indexes for the collection.</exception>
+        </member>
+        <member name="T:Hanselman.CST352.InstructionCollection.InstructionEnumerator">
+            <summary>
+            Provided for "foreach" support with this collection
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.#ctor(Hanselman.CST352.InstructionCollection)">
+            <summary>
+            Public constructor for an InstructionEnumerator
+            </summary>
+            <param name="mappings">The <see cref="T:Hanselman.CST352.InstructionCollection"/>we are going to iterate over</param>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.MoveNext">
+            <summary>
+            Move to the next Instruction
+            </summary>
+            <returns>true or false based on success</returns>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#MoveNext">
+            <summary>
+            Move to the next Instruction
+            </summary>
+            <returns>true or false based on success</returns>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.Reset">
+            <summary>
+            Reset the cursor
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#Reset">
+            <summary>
+            Reset the cursor
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.Current">
+            <summary>
+            The current <see cref="T:Hanselman.CST352.Instruction"/>
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            The current IEnumerator interface
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.MemoryManager">
+            <summary>
+            The MemoryManager for the <see cref="T:Hanselman.CST352.OS"/>.   All memory accesses by a <see cref="T:Hanselman.CST352.Process"/> 
+            go through this class.
+            </summary>
+            <example>
+            theOS.memoryMgr[processId, 5]; //accesses memory at address 5
+            </example>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.virtualMemSize">
+            <summary>
+            Total ammount of addressable memory.  This is set in the Constructor. 
+            Once set, it is readonly
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.#ctor(System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="virtualMemSizeIn"></param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.ProcessHeapAlloc(Hanselman.CST352.Process,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="p">The Process</param>
+            <param name="bytesRequested">The number of bytes requested.  Will be rounded up to the nearest page</param>
+            <returns>The Start Address of the Alloc'ed memory</returns>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.memoryClearInt">
+            <summary>
+            For debugging only.  The value used to "zero out" memory when doing a FreeMemory. 
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.ProcessHeapFree(Hanselman.CST352.Process,System.UInt32)">
+            <summary>
+            Releases pages that were Alloc'ed from the Process's Heap
+            </summary>
+            <param name="p">The Processes</param>
+            <param name="startAddr">The Process address that the allocation began at</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.CreateHeapTableForProcess(Hanselman.CST352.Process)">
+            <summary>
+            Adds all the pages allocated to a Process's heap to a PCB specific table of memory pages
+            </summary>
+            <param name="p">The Process</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.getUIntFrom(System.UInt32,System.UInt32)">
+            <summary>
+            Gets a 4 byte unsigned integer (typically an opCode param) from memory
+            </summary>
+            <param name="processid">The calling processid</param>
+            <param name="processIndex">The address in memory from the Process's point of view</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.setUIntAt(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Sets a 4 byte unsigned integer (typically an opCode param) to memory
+            </summary>
+            <param name="processid">The calling processid</param>
+            <param name="processIndex">The address in memory from the Process's point of view</param>
+            <param name="avalue">The new value</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.getBytesFrom(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Gets an array of "length" bytes from a specific process's memory address
+            </summary>
+            <param name="processid">The calling process's id</param>
+            <param name="processIndex">The address in memory from the Process's point of view</param>
+            <param name="length">how many bytes</param>
+            <returns>an initialized byte array containing the contents of memory</returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.setBytesAt(System.UInt32,System.UInt32,System.Byte[])">
+            <summary>
+            Sets an array of bytes to a specific process's memory address
+            </summary>
+            <param name="processid">The calling processid</param>
+            <param name="processIndex">The address in memory from the Process's point of view</param>
+            <param name="pageValue">The source array of bytes</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.ProcessAddrToPhysicalAddr(System.UInt32,System.UInt32,System.Boolean)">
+            <summary>
+            Translates a Process's address space into physical address space
+            </summary>
+            <param name="processid">The calling process's id</param>
+            <param name="processMemoryIndex">The address in memory from the Process's point of view</param>
+            <param name="dirtyFlag">Whether we mark this <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> as dirty or not</param>
+            <returns>The physical address of the memory we requested</returns>
+            <exception cref="T:Hanselman.CST352.MemoryException">This process has accessed memory outside it's Process address space</exception>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.ResetPage(Hanselman.CST352.MemoryManager.MemoryPage)">
+            <summary>
+            Resets a memory page to defaults, deletes that page's swap file and 
+            may mark the page as free in physical memory
+            </summary>
+            <param name="page">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to reset</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.VirtualAddrToPhysical(Hanselman.CST352.MemoryManager.MemoryPage,System.UInt32)">
+            <summary>
+            
+            </summary>
+            <param name="page"></param>
+            <param name="virtualIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.BytesToPages(System.UInt32)">
+            <summary>
+            Helper method to translate # of bytes to # of Memory Pages
+            </summary>
+            <param name="bytes">bytes to translate</param>
+            <returns>number of pages</returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.ReleaseMemoryOfProcess(System.UInt32)">
+            <summary>
+            Takes a Process's ID and releases all MemoryPages assigned to it, zeroing and reseting them
+            </summary>
+            <param name="pid">Process ID</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.SetMemoryOfProcess(System.UInt32,System.UInt32,System.UInt32,System.Byte)">
+            <summary>
+            Zeros out memory belonging to a Process from start until length
+            </summary>
+            <param name="pid">Process ID</param>
+            <param name="start">start memory address</param>
+            <param name="length">length in bytes</param>
+            <param name="newvalue">the new value of the byte</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.MapSharedMemoryToProcess(System.UInt32,System.UInt32)">
+            <summary>
+            Maps the shared memory region to the process passed in
+            </summary>
+            <param name="memoryRegion">the number of the shared region to map</param>
+            <param name="pid">Process ID</param>
+            <returns>the index in process memory of the shared region</returns>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.MapMemoryToProcess(System.UInt32,System.UInt32)">
+            <summary>
+            Takes a number of bytes and a process id and assigns MemoryPages in the pageTable to the Process
+            </summary>
+            <param name="bytes"># of bytes to assign</param>
+            <param name="pid">Process ID</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.SwapOut(Hanselman.CST352.MemoryManager.MemoryPage)">
+            <summary>
+            Swaps the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to disk.  Currently implemented as XML for fun.
+            </summary>
+            <param name="victim">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to be swapped</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.SwapIn(Hanselman.CST352.MemoryManager.MemoryPage)">
+            <summary>
+            Swaps in the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> from disk.  Currently implemented as XML for fun.
+            </summary>
+            <param name="winner">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> that is being swapped in</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.PageFaultsForProcess(Hanselman.CST352.Process)">
+            <summary>
+            For statistical purposes only.  
+            Total up how many times this Process has been involved in a Page Fault
+            </summary>
+            <param name="p">The Process to total</param>
+            <returns>number of Page Faults</returns>
+        </member>
+        <member name="P:Hanselman.CST352.MemoryManager.Item(System.UInt32,System.UInt32)">
+            <summary>
+            Public accessor method to make Virtual Memory look like an array
+            </summary>
+            <example>
+            theOS.memoryMgr[processId, 5]; //accesses memory at address 5
+            </example>
+        </member>
+        <member name="T:Hanselman.CST352.MemoryManager.MemoryPage">
+            <summary>
+            Represents an entry in the Page Table.  MemoryPages (or "Page Table Entries") 
+            are created once and never destroyed, their values are just reassigned
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.SharedMemoryRegion">
+            <summary>
+            The number of the shared memory region this MemoryPage is mapped to
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.pidSharedOwnerList">
+            <summary>
+            One of two parallel arrays, one of shared owners of this page, one of shared process indexes of this page
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.pidSharedProcessIndex">
+            <summary>
+            One of two parallel arrayz, one of shared owners of this page, one of shared process indexes of this page
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.pageNumber">
+            <summary>
+            The number this page is in addressable Memory.  Set once and immutable
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.addrVirtual">
+            <summary>
+            The address in addressable space this page is responsbile for
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.addrProcessIndex">
+            <summary>
+            The address in Process space this page is responsible for
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.heapAllocationAddr">
+            <summary>
+            The process address that originally allocated this page.  Kept so we can free that page(s) later.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.pidOwner">
+            <summary>
+            The process that is currently using this apge
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.addrPhysical">
+            <summary>
+            This is only valid when 
+            pidOwner != 0 and isValid == true
+            meaning the page is actually mapped and present
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.isValid">
+            <summary>
+            Is the page in memory now?
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.isDirty">
+            <summary>
+            Has the page been changes since it was last swapped in from Disk?
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.pageFaults">
+            <summary>
+            For statistics: How many times has this page been involved in a pageFault?
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.accessCount">
+            <summary>
+            For aging and swapping: How many times has this page's address range been accessed?
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPage.lastAccessed">
+            <summary>
+            For aging and swapping: When was this page last accessed?
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.MemoryPage.#ctor(System.UInt32,System.Boolean)">
+            <summary>
+            Only public constructor for a Memory Page and is only called once 
+            in the <see cref="T:Hanselman.CST352.MemoryManager"/> constructor
+            </summary>
+            <param name="initAddrVirtual">The address in addressable memory this page is responsible for</param>
+            <param name="isValidFlag">Is this page in memory right now?</param>
+        </member>
+        <member name="T:Hanselman.CST352.MemoryManager.MemoryPageValue">
+            <summary>
+            Represents the actual values in memory that a MemoryPage points to.  
+            MemoryPageValue is serialized to disk, currently as XML, in <see cref="M:Hanselman.CST352.MemoryManager.SwapOut(Hanselman.CST352.MemoryManager.MemoryPage)"/>.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPageValue.memory">
+            <summary>
+            The array of bytes holding the value of memory for this page
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPageValue.accessCount">
+            <summary>
+            For aging and swapping: How many times has this page's address range been accessed?
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryManager.MemoryPageValue.lastAccessed">
+            <summary>
+            For aging and swapping: When was this page last accessed?
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.MemoryException">
+            <summary>
+            Memory Protection: MemoryExceptions are constructed and thrown 
+            when a <see cref="T:Hanselman.CST352.Process"/> accessed memory that doesn't belong to it.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryException.pid">
+            <summary>
+            Process ID
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.MemoryException.processAddress">
+            <summary>
+            Process address in question
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryException.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Public Constructor for a Memory Exception
+            </summary>
+            <param name="pidIn">Process ID</param>
+            <param name="addrIn">Process address</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryException.ToString">
+            <summary>
+            Pretty printing for MemoryExceptions
+            </summary>
+            <returns>Formatted string about the MemoryException</returns>
+        </member>
+        <member name="T:Hanselman.CST352.StackException">
+            <summary>
+            Memory Protection: MemoryExceptions are constructed and thrown 
+            when a <see cref="T:Hanselman.CST352.Process"/> accessed memory that doesn't belong to it.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.StackException.pid">
+            <summary>
+            Process ID
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.StackException.tooManyBytes">
+            <summary>
+            Num of Bytes more than the stack could handle
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.StackException.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Public Constructor for a Memory Exception
+            </summary>
+            <param name="pidIn">Process ID</param>
+            <param name="tooManyBytesIn">Process address</param>
+        </member>
+        <member name="M:Hanselman.CST352.StackException.ToString">
+            <summary>
+            Pretty printing for MemoryExceptions
+            </summary>
+            <returns>Formatted string about the MemoryException</returns>
+        </member>
+        <member name="T:Hanselman.CST352.HeapException">
+            <summary>
+            Memory Protection: MemoryExceptions are constructed and thrown 
+            when a <see cref="T:Hanselman.CST352.Process"/> accessed memory that doesn't belong to it.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.HeapException.pid">
+            <summary>
+            Process ID
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.HeapException.tooManyBytes">
+            <summary>
+            Num of Bytes more than the stack could handle
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.HeapException.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Public Constructor for a Memory Exception
+            </summary>
+            <param name="pidIn">Process ID</param>
+            <param name="tooManyBytesIn">Process address</param>
+        </member>
+        <member name="M:Hanselman.CST352.HeapException.ToString">
+            <summary>
+            Pretty printing for MemoryExceptions
+            </summary>
+            <returns>Formatted string about the MemoryException</returns>
+        </member>
+        <member name="T:Hanselman.CST352.SystemCall">
+            <summary>
+            The delegate (object-oriented function pointer) definition for an OS System Call. 
+            ALl opCodes will be mapped to a function that matches this signature
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.OS">
+            <summary>
+            The definition of an Operarting System, including a <see cref="T:Hanselman.CST352.MemoryManager"/> and a <see cref="T:Hanselman.CST352.ProcessCollection"/>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.runningProcesses">
+            <summary>
+            Contains the <see cref="T:Hanselman.CST352.Process"/> and the <see cref="T:Hanselman.CST352.Process.ProcessControlBlock"/> for all runningProcesses
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.currentProcess">
+            <summary>
+            Holds a reference to the current running <see cref="T:Hanselman.CST352.Process"/>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.memoryMgr">
+            <summary>
+            A reference to the <see cref="T:Hanselman.CST352.MemoryManager"/> Class.  A <see cref="T:Hanselman.CST352.Process"/> memory accesses go 
+            through this class.
+            </summary>
+            <example>
+            theOS.memoryMgr[processId, 5]; //accesses memory at address 5
+            </example>
+        </member>
+        <member name="F:Hanselman.CST352.OS.locks">
+            <summary>
+            There are 10 locks, numbered 1 to 10.  Lock 0 is not used.  
+            We will store 0 when the lock is free, or the ProcessID when the lock is acquired
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.events">
+            <summary>
+            There are 10 events, numbered 1 to 10.  Event 0 is not used
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.processIdPool">
+            <summary>
+            This counter is incremented as new processes are created.  
+            It provides a unique id for a process. Process Id 0 is assumed to be the OS.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.bDumpInstructions">
+            <summary>
+            Do we output debug for Instructions?
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.#ctor(System.UInt32)">
+            <summary>
+            Public constructor for the OS
+            </summary>
+            <param name="virtualMemoryBytes">The number of "addressable" bytes of memory for the whole OS.</param>
+        </member>
+        <member name="M:Hanselman.CST352.OS.currentProcessIsEligible">
+            <summary>
+            Checks if the <see cref="F:Hanselman.CST352.OS.currentProcess"/> is eligible to run
+            </summary>
+            <returns>true if the <see cref="F:Hanselman.CST352.OS.currentProcess"/> is eligible to run</returns>
+        </member>
+        <member name="M:Hanselman.CST352.OS.DumpProcessStatistics(System.Int32)">
+            <summary>
+            Dumps collected statistics of a process when it's been removed from the <see cref="F:Hanselman.CST352.OS.runningProcesses"/> table
+            </summary>
+            <param name="processIndex">The Index (not the ProcessID!) in the <see cref="F:Hanselman.CST352.OS.runningProcesses"/> table of a Process</param>
+        </member>
+        <member name="M:Hanselman.CST352.OS.execute">
+            <summary>
+            The primary control loop for the whole OS.  
+            Spins through eligible processes and executes their opCodes
+            Provides scheduling and removes old processes.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.DumpContextSwitchIn">
+            <summary>
+            If the DumpContextSwitch Configuration option is set to True, reports the Context Switch.  
+            Used for debugging
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.DumpContextSwitchOut">
+            <summary>
+            If the DumpContextSwitch Configuration option is set to True, reports the Context Switch.  
+            Used for debugging
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.DumpProcessMemory(Hanselman.CST352.Process)">
+            <summary>
+            Outputs a view of memory from the Process's point of view
+            </summary>
+            <param name="p">The Process to Dump</param>
+        </member>
+        <member name="M:Hanselman.CST352.OS.SaveCPUState">
+            <summary>
+            Called on a context switch. Copy the CPU's <see cref="F:Hanselman.CST352.CPU.registers"/> to the <see cref="F:Hanselman.CST352.OS.currentProcess"/>'s <see cref="F:Hanselman.CST352.CPU.registers"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.LoadCPUState">
+            <summary>
+            Called on a context switch. Copy the <see cref="F:Hanselman.CST352.OS.currentProcess"/>'s <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.registers"/> to the CPU's <see cref="F:Hanselman.CST352.CPU.registers"/> 
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.createProcess(Hanselman.CST352.Program,System.UInt32)">
+            <summary>
+            Take as a <see cref="T:Hanselman.CST352.Program"/> and creates a Process object, adding it to the <see cref="F:Hanselman.CST352.OS.runningProcesses"/>
+            </summary>
+            <param name="prog">Program to load</param>
+            <param name="memorySize">Size of memory in bytes to assign to this Process</param>
+            <returns>The newly created Process</returns>
+        </member>
+        <member name="M:Hanselman.CST352.OS.ReleaseLocksOfProccess(System.UInt32)">
+            <summary>
+            Releases any locks held by this process.  
+            This function is called when the process exits.
+            </summary>
+            <param name="pid">Process ID</param>
+        </member>
+        <member name="M:Hanselman.CST352.OS.FetchUIntAndMove">
+            <summary>
+            Utility function to fetch a 4 byte unsigned int from Process Memory based on the current <see cref="P:Hanselman.CST352.CPU.ip"/>
+            </summary>
+            <returns>a new uint</returns>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Incr">
+            <summary>
+            Increments register
+            <pre>1 r1</pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Addi">
+            <summary>
+             Adds constant 1 to register 1
+            <pre>
+            2 r1, $1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Addr">
+            <summary>
+            Adds r2 to r1 and stores the value in r1
+            <pre>
+            3 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Cmpi">
+            <summary>
+            Compare contents of r1 with 1.  If r1 &lt; 9 set sign flag.  If r1 &gt; 9 clear sign flag.
+            If r1 == 9 set zero flag.
+            <pre>
+            14 r1, $9
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Cmpr">
+            <summary>
+            Compare contents of r1 with r2.  If r1 &lt; r2 set sign flag.  If r1 &gt; r2 clear sign flag.
+            If r1 == r2 set zero flag.
+            <pre>
+            15 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Call">
+            <summary>
+            Call the procedure at offset r1 bytes from the current instrucion.  
+            The address of the next instruction to excetute after a return is pushed on the stack
+            <pre>
+            19 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Callm">
+            <summary>
+            Call the procedure at offset of the bytes in memory pointed by r1 from the current instrucion.  
+            The address of the next instruction to excetute after a return is pushed on the stack
+            <pre>
+            20 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Ret">
+            <summary>
+            Pop the return address from the stack and transfer control to this instruction
+            <pre>
+            21
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Jmp">
+            <summary>
+            Control transfers to the instruction whose address is r1 bytes relative to the current instruction. 
+            r1 may be negative.
+            <pre>
+            13 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Jlt">
+            <summary>
+            If the sign flag is set, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            16 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Jgt">
+            <summary>
+            If the sign flag is clear, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            17 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Je">
+            <summary>
+            If the zero flag is set, jump to the instruction that is offset r1 bytes from the current instruction
+            <pre>
+            18 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Noop">
+            <summary>
+            Just that, does nothing
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Exit">
+            <summary>
+            This opcode causes an exit and the process's memory to be unloaded.  
+            Another process or the idle process must now be scheduled
+            <pre>
+            27
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Movi">
+            <summary>
+            Moves constant 1 into register 1
+            <pre>
+            6 r1, $1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Movr">
+            <summary>
+            Moves contents of register2 into register 1
+            <pre>
+            7 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Movmr">
+            <summary>
+            Moves contents of memory pointed to register 2 into register 1
+            <pre>
+            8 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Movrm">
+            <summary>
+            Moves contents of register 2 into memory pointed to by register 1
+            <pre>
+            9 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Movmm">
+            <summary>
+            Moves contents of memory pointed to by register 2 into memory pointed to by register 1
+            <pre>
+            10 r1, r2
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Printr">
+            <summary>
+            Prints out contents of register 1
+            <pre>
+            11 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Printm">
+            <summary>
+            Prints out contents of memory pointed to by register 1
+            <pre>
+            12 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Input">
+            <summary>
+            Read the next 32-bit value into register r1
+            <pre>
+            32 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Sleep">
+            <summary>
+            Sleep the # of clock cycles as indicated in r1.  
+            Another process or the idle process 
+            must be scheduled at this point.  
+            If the time to sleep is 0, the process sleeps infinitely
+            <pre>
+            25 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.SetPriority">
+            <summary>
+            Set the priority of the current process to the value
+            in register r1
+            <pre>
+            26 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Pushr">
+            <summary>
+            Pushes contents of register 1 onto stack
+            <pre>
+            4 r1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Pushi">
+            <summary>
+            Pushes constant 1 onto stack
+            <pre>
+            5 $1
+            </pre>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.TerminateProcess">
+            <summary>
+            Terminate the process whose id is in the register r1
+            <pre>
+            34 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Popr">
+            <summary>
+            Pop the contents at the top of the stack into register r1 
+            <pre>
+            35 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.MemoryClear">
+            <summary>
+            set the bytes starting at address r1 of length r2 to zero
+            <pre>
+            33 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Popm">
+            <summary>
+            Pop the contents at the top of the stack into the memory pointed to by register r1 
+            <pre>
+            36 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.AcquireLock">
+            <summary>
+            Acquire the OS lock whose # is provided in register r1.  
+            Icf the lock is not held by the current process
+            the operation is a no-op
+            <pre>
+            23 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.ReleaseLock">
+            <summary>
+            Release the OS lock whose # is provided in register r1.  
+            Another process or the idle process 
+            must be scheduled at this point.  
+            if the lock is not held by the current process, 
+            the instruction is a no-op
+            <pre>
+            24 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.SignalEvent">
+            <summary>
+            Signal the event indicated by the value in register r1
+            <pre>
+            30 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.WaitEvent">
+            <summary>
+            Wait for the event in register r1 to be triggered resulting in a context-switch
+            <pre>
+            31 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.MapSharedMem">
+            <summary>
+            Map the shared memory region identified by r1 and return the start address in r2
+            <pre>
+            29 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.Alloc">
+            <summary>
+            Allocate memory of the size equal to r1 bytes and return the address of the new memory in r2.  
+            If failed, r2 is cleared to 0.
+            <pre>
+            22 r1, r2
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.FreeMemory">
+            <summary>
+            Free the memory allocated whose address is in r1
+            <pre>
+            28 r1
+            </pre>		
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.OS.StackPush(System.UInt32,System.UInt32)">
+            <summary>
+            Push a uint on the stack for this Process
+            </summary>
+            <param name="processid">The Process Id</param>
+            <param name="avalue">The uint for the stack</param>
+        </member>
+        <member name="M:Hanselman.CST352.OS.StackPop(System.UInt32)">
+            <summary>
+            Pop a uint off the stack for this Process
+            </summary>
+            <param name="processid">The Process ID</param>
+            <returns>the uint from the stack</returns>
+        </member>
+        <member name="T:Hanselman.CST352.OS.EventState">
+            <summary>
+            An event is either Signaled or NonSignaled
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.EventState.NonSignaled">
+            <summary>
+            Events are by default NonSignaled
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.EventState.Signaled">
+            <summary>
+            Events become Signaled, and Processes that are waiting on them wake up when Signaled
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.Process">
+            <summary>
+            Represents a running Process in the <see cref="F:Hanselman.CST352.OS.runningProcesses"/> table.  Implements <see cref="T:System.IComparable"/> 
+            so two Processes can be compared with &gt; and &lt;.  This will allow easy sorting of the runningProcesses table 
+            based on <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/>.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Process.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Process Constructor
+            </summary>
+            <param name="processId">the readonly unique id for this Process</param>
+            <param name="memorySize">the ammount of memory this Process and address</param>
+        </member>
+        <member name="F:Hanselman.CST352.Process.PCB">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Process.CompareTo(System.Object)">
+            <summary>
+            Needed to implement <see cref="T:System.IComparable"/>.  Compares Processes based on <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/>.
+            <pre>
+            Value                  Meaning 
+            --------------------------------------------------------
+            Less than zero         This instance is less than obj
+            Zero                   This instance is equal to obj 
+            Greater than an zero   This instance is greater than obj
+            </pre>
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hanselman.CST352.Process.ProcessControlBlock">
+            <summary>
+            Internal class to <see cref="T:Hanselman.CST352.Process"/> that represents a ProcessControlBlock.  It isn't a struct so it can have
+            instance field initializers.  Maintains things like <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.registers"/> and <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.clockCycles"/> for this
+            Process.
+            
+            Global Data Region at R9 and SP at R10 are set in <see cref="M:Hanselman.CST352.OS.createProcess(Hanselman.CST352.Program,System.UInt32)"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Process.ProcessControlBlock.#ctor(System.UInt32,System.UInt32)">
+            <summary>
+            Constructor for a ProcessControlBlock
+            </summary>
+            <param name="id">the new readonly ProcessId.  Set only once, readonly afterwards.</param>
+            <param name="memorySize"></param>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.pid">
+            <summary>
+            The OS-wide unique Process ID.  This is set in the <see cref="T:Hanselman.CST352.Process.ProcessControlBlock"/> constructor.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.codeSize">
+            <summary>
+            The length of the code segement for this Process relative to the 0.  It points one byte after the code segment.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.stackSize">
+            <summary>
+            Maximum size of the stack for this Process
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.dataSize">
+            <summary>
+            Size of the Data Segement for this Process
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.heapAddrStart">
+            <summary>
+            Start address of the Heap for this Process
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.heapAddrEnd">
+            <summary>
+            End Address of the Heap for this Process 
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.heapPageTable">
+            <summary>
+            ArrayList of MemoryPages that are associated with the Heap for this Process
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.processMemorySize">
+            <summary>
+            The ammount of memory this Process is allowed to access.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.state">
+            <summary>
+            The states this Process can go through.  Starts at NewProcess, changes to Running.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.registers">
+            <summary>
+            We have 10 registers.  R11 is the <see cref="P:Hanselman.CST352.Process.ProcessControlBlock.ip"/>, and we don't use R0.  R10 is the <see cref="P:Hanselman.CST352.Process.ProcessControlBlock.sp"/>.  So, that's 1 to 10, and 11.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.bitFlagRegisters">
+            <summary>
+            We have a Sign Flag and a Zero Flag in a <see cref="T:System.Collections.BitArray"/>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.priority">
+            <summary>
+            This <see cref="T:Hanselman.CST352.Process">Process's</see> current priority.  Can be changed programmatically.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.timeQuantum">
+            <summary>
+            The number of <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.clockCycles"/> this <see cref="T:Hanselman.CST352.Process"/> can execute before being switched out.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.waitingLock">
+            <summary>
+            If we are waiting on a lock, we'll store it's value here
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.waitingEvent">
+            <summary>
+            If we are waiting on an event, we'll store it's value here
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.clockCycles">
+            <summary>
+            The number of clockCycles this <see cref="T:Hanselman.CST352.Process"/> has executed
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.sleepCounter">
+            <summary>
+            The number of additional <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.clockCycles"/> to sleep.  
+            If we are in a waiting state, and this is 0, we will sleep forever.  
+            If this is 1 (we are about to wake up) our state will change to ProcessState.Running
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.contextSwitches">
+            <summary>
+            The number of times this application has been switched out
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.Process.ProcessControlBlock.pageFaults">
+            <summary>
+            The number of pageFaults this <see cref="T:Hanselman.CST352.Process"/> has experienced.
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.Process.ProcessControlBlock.sf">
+            <summary>
+            Public get/set accessor for the Sign Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.Process.ProcessControlBlock.zf">
+            <summary>
+            Public get/set accessor for the Zero Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.Process.ProcessControlBlock.sp">
+            <summary>
+            Public get/set accessor for the Stack Pointer
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.Process.ProcessControlBlock.ip">
+            <summary>
+            Public get/set accessor for the Instruction Pointer
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.ProcessState">
+            <summary>
+            All the states a <see cref="T:Hanselman.CST352.Process"/> can experience.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.NewProcess">
+            <summary>
+            A <see cref="T:Hanselman.CST352.Process"/> initial state
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.Ready">
+            <summary>
+            The state of a <see cref="T:Hanselman.CST352.Process"/> ready to run
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.Running">
+            <summary>
+            The state of the currently running <see cref="T:Hanselman.CST352.Process"/>
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.WaitingAsleep">
+            <summary>
+            The state of a <see cref="T:Hanselman.CST352.Process"/> waiting after a Sleep
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.WaitingOnLock">
+            <summary>
+            The state of a <see cref="T:Hanselman.CST352.Process"/> waiting after an AcquireLock
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.WaitingOnEvent">
+            <summary>
+            The state of a <see cref="T:Hanselman.CST352.Process"/> waiting after a WaitEvent
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessState.Terminated">
+            <summary>
+            The state of a <see cref="T:Hanselman.CST352.Process"/> waiting to be removed from the Running <see cref="T:Hanselman.CST352.ProcessCollection"/>
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.ProcessPriority">
+            <summary>
+            The Range of <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/> a <see cref="T:Hanselman.CST352.Process"/> can experience.
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessPriority.LowPriority">
+            <summary>
+            The lowest priority a <see cref="T:Hanselman.CST352.Process"/> can be
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.ProcessPriority.MaxPriority">
+            <summary>
+            The Highest priority a <see cref="T:Hanselman.CST352.Process"/> can be
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.ProcessCollection">
+            <summary>
+                
+                  A collection that stores <see cref="T:Hanselman.CST352.Process"/> objects.
+               
+            </summary>
+            <seealso cref="T:Hanselman.CST352.ProcessCollection"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.#ctor">
+            <summary>
+                
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+               
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.#ctor(Hanselman.CST352.ProcessCollection)">
+            <summary>
+                
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/> based on another <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+               
+            </summary>
+            <param name="value">
+                  A <see cref="T:Hanselman.CST352.ProcessCollection"/> from which the contents are copied
+            </param>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.#ctor(Hanselman.CST352.Process[])">
+            <summary>
+                
+                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/> containing any array of <see cref="T:Hanselman.CST352.Process"/> objects.
+               
+            </summary>
+            <param name="value">
+                  A array of <see cref="T:Hanselman.CST352.Process"/> objects with which to intialize the collection
+            </param>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)">
+            <summary>
+               Adds a <see cref="T:Hanselman.CST352.Process"/> with the specified value to the 
+               <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to add.</param>
+            <returns>
+               The index at which the new element was inserted.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.Process[])"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.Process[])">
+            <summary>
+            Copies the elements of an array to the end of the <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+            </summary>
+            <param name="value">
+               An array of type <see cref="T:Hanselman.CST352.Process"/> containing the objects to add to the collection.
+            </param>
+            <returns>
+              None.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.ProcessCollection)">
+            <summary>
+                
+                  Adds the contents of another <see cref="T:Hanselman.CST352.ProcessCollection"/> to the end of the collection.
+               
+            </summary>
+            <param name="value">
+               A <see cref="T:Hanselman.CST352.ProcessCollection"/> containing the objects to add to the collection.
+            </param>
+            <returns>
+              None.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Contains(Hanselman.CST352.Process)">
+            <summary>
+            Gets a value indicating whether the 
+               <see cref="T:Hanselman.CST352.ProcessCollection"/> contains the specified <see cref="T:Hanselman.CST352.Process"/>.
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to locate.</param>
+            <returns>
+            <see langword="true"/> if the <see cref="T:Hanselman.CST352.Process"/> is contained in the collection; 
+              otherwise, <see langword="false"/>.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.IndexOf(Hanselman.CST352.Process)"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Compare(System.Object,System.Object)">
+            <summary>
+            Implemented for IComparable.  
+            </summary>
+            <param name="x">A Process object</param>
+            <param name="y">A Process object</param>
+            <returns>a comparison int from CompareTo</returns>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Sort">
+            <summary>
+            Sorts the list of <see cref="F:Hanselman.CST352.OS.runningProcesses"/> based on <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/>
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.CopyTo(Hanselman.CST352.Process[],System.Int32)">
+            <summary>
+            Copies the <see cref="T:Hanselman.CST352.ProcessCollection"/> values to a one-dimensional <see cref="T:System.Array"/> instance at the 
+               specified index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the values copied from <see cref="T:Hanselman.CST352.ProcessCollection"/> .</param>
+            <param name="index">The index in <paramref name="array"/> where copying begins.</param>
+            <returns>
+              None.
+            </returns>
+            <exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional. -or- The number of elements in the <see cref="T:Hanselman.CST352.ProcessCollection"/> is greater than the available space between <paramref name="arrayIndex"/> and the end of <paramref name="array"/>.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than <paramref name="array"/>'s lowbound. </exception>
+            <seealso cref="T:System.Array"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.IndexOf(Hanselman.CST352.Process)">
+            <summary>
+               Returns the index of a <see cref="T:Hanselman.CST352.Process"/> in 
+                  the <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to locate.</param>
+            <returns>
+            The index of the <see cref="T:Hanselman.CST352.Process"/> of <paramref name="value"/> in the 
+            <see cref="T:Hanselman.CST352.ProcessCollection"/>, if found; otherwise, -1.
+            </returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.Contains(Hanselman.CST352.Process)"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Insert(System.Int32,Hanselman.CST352.Process)">
+            <summary>
+            Inserts a <see cref="T:Hanselman.CST352.Process"/> into the <see cref="T:Hanselman.CST352.ProcessCollection"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index where <paramref name="value"/> should be inserted.</param>
+            <param name=" value">The <see cref="T:Hanselman.CST352.Process"/> to insert.</param>
+            <returns>None.</returns>
+            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.GetEnumerator">
+            <summary>
+               Returns an enumerator that can iterate through 
+                  the <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+            </summary>
+            <returns>None.</returns>
+            <seealso cref="T:System.Collections.IEnumerator"/>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.Remove(Hanselman.CST352.Process)">
+            <summary>
+                Removes a specific <see cref="T:Hanselman.CST352.Process"/> from the 
+               <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+            </summary>
+            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to remove from the <see cref="T:Hanselman.CST352.ProcessCollection"/> .</param>
+            <returns>None.</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.Item(System.Int32)">
+            <summary>
+            Represents the entry at the specified index of the <see cref="T:Hanselman.CST352.Process"/>.
+            </summary>
+            <param name="index">The zero-based index of the entry to locate in the collection.</param>
+            <value>
+                The entry at the specified index of the collection.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is outside the valid range of indexes for the collection.</exception>
+        </member>
+        <member name="T:Hanselman.CST352.ProcessCollection.ProcessEnumerator">
+            <summary>
+            Provided for "foreach" support with this collection
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.#ctor(Hanselman.CST352.ProcessCollection)">
+            <summary>
+            Public constructor for an ProcessEnumerator
+            </summary>
+            <param name="mappings">The <see cref="T:Hanselman.CST352.ProcessCollection"/>we are going to iterate over</param>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.MoveNext">
+            <summary>
+            Move to the next Process
+            </summary>
+            <returns>true or false based on success</returns>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#MoveNext">
+            <summary>
+            Move to the next Process
+            </summary>
+            <returns>true or false based on success</returns>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.Reset">
+            <summary>
+            Reset the cursor
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#Reset">
+            <summary>
+            Reset the cursor
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.Current">
+            <summary>
+            The current <see cref="T:Hanselman.CST352.Process"/>
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            The current IEnumerator interface
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.Program">
+            <summary>
+            Represents a Program (not a <see cref="T:Hanselman.CST352.Process"/>) on disk and the <see cref="T:Hanselman.CST352.Instruction"/>s it's comprised of.  
+            Used as a utility class to load a <see cref="T:Hanselman.CST352.Program"/> off disk.
+            </summary>
+        </member>
+        <member name="M:Hanselman.CST352.Program.#ctor(Hanselman.CST352.InstructionCollection)">
+            <summary>
+            Public constructor for a Program
+            </summary>
+            <param name="instructionsParam">The collection of <see cref="T:Hanselman.CST352.Instruction"/> objects that make up this Program</param>
+        </member>
+        <member name="M:Hanselman.CST352.Program.GetMemoryImage">
+            <summary>
+            Spins through the <see cref="T:Hanselman.CST352.InstructionCollection"/> and creates an array of bytes 
+            that is then copied into Memory by <see cref="M:Hanselman.CST352.OS.createProcess(Hanselman.CST352.Program,System.UInt32)"/>
+            </summary>
+            <returns>Array of bytes representing the <see cref="T:Hanselman.CST352.Program"/> in memory</returns>
+        </member>
+        <member name="M:Hanselman.CST352.Program.LoadProgram(System.String)">
+            <summary>
+            Loads a Program from a file on disk.  For each line the Program, create an <see cref="T:Hanselman.CST352.Instruction"/>
+            and pass the raw string to the Instructions's constructor.  The resulting <see cref="T:Hanselman.CST352.InstructionCollection"/>
+            is the Program
+            </summary>
+            <param name="fileName">file with code to load</param>
+            <returns>a new loaded Program</returns>
+        </member>
+        <member name="M:Hanselman.CST352.Program.DumpProgram">
+            <summary>
+            For Debugging, pretty prints the Instructions that make up this Program
+            </summary>
+        </member>
+    </members>
+</doc>
