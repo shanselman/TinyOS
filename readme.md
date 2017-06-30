@@ -1,5 +1,4 @@
-# Scott Hanselman's
-Tiny Virtual Operating System and Abstract Machine in C#
+# Scott Hanselman's Tiny Virtual Operating System and Abstract Machine in C#
 
 ## What is this?
 
