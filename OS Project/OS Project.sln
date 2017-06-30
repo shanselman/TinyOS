@@ -4,6 +4,8 @@ VisualStudioVersion = 15.0.26621.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OS Project", "OS Project.csproj", "{8C0B39D1-53DF-42E2-8E6F-321875EAE3BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyOSCore", "..\TinyOSCore\TinyOSCore.csproj", "{37F45BD7-2F5A-4DB8-A16E-FD589428B750}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,6 +16,10 @@ Global
 		{8C0B39D1-53DF-42E2-8E6F-321875EAE3BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C0B39D1-53DF-42E2-8E6F-321875EAE3BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C0B39D1-53DF-42E2-8E6F-321875EAE3BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37F45BD7-2F5A-4DB8-A16E-FD589428B750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F45BD7-2F5A-4DB8-A16E-FD589428B750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F45BD7-2F5A-4DB8-A16E-FD589428B750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F45BD7-2F5A-4DB8-A16E-FD589428B750}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -65,7 +65,6 @@ namespace Hanselman.CST352
 				{
 					// Total addressable (virtual) memory taken from the command line
 					bytesOfVirtualMemory = uint.Parse(args[0]);
-					AppSettingsReader appreader = new AppSettingsReader();
 					
 					bytesOfPhysicalMemory = uint.Parse(ConfigurationManager.AppSettings["PhysicalMemory"]);
 
