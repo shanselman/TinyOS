@@ -50,6 +50,26 @@
             We have a Sign Flag and a Zero Flag in a <see cref="T:System.Collections.BitArray"/>
             </summary>
         </member>
+        <member name="P:Hanselman.CST352.CPU.sf">
+            <summary>
+            Public get/set accessor for the Sign Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.zf">
+            <summary>
+            Public get/set accessor for the Zero Flag
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.sp">
+            <summary>
+            Public get/set accessor for Stack Pointer
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.CPU.ip">
+            <summary>
+            Public get/set access for the CPU's Instruction Pointer
+            </summary>
+        </member>
         <member name="M:Hanselman.CST352.CPU.executeNextOpCode">
             <summary>
             Takes the process id from the <see cref="F:Hanselman.CST352.OS.currentProcess"/> and the CPU's <see cref="P:Hanselman.CST352.CPU.ip"/> and 
@@ -101,26 +121,6 @@
             <param name="number">number to be rounded</param>
             <param name="boundary">boundary multiplier</param>
             <returns>new rounded number</returns>
-        </member>
-        <member name="P:Hanselman.CST352.CPU.sf">
-            <summary>
-            Public get/set accessor for the Sign Flag
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.CPU.zf">
-            <summary>
-            Public get/set accessor for the Zero Flag
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.CPU.sp">
-            <summary>
-            Public get/set accessor for Stack Pointer
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.CPU.ip">
-            <summary>
-            Public get/set access for the CPU's Instruction Pointer
-            </summary>
         </member>
         <member name="T:Hanselman.CST352.EntryPoint">
             <summary>
@@ -514,142 +514,142 @@
         </member>
         <member name="T:Hanselman.CST352.InstructionCollection">
             <summary>
-                  A collection that stores <see cref="T:Hanselman.CST352.Instruction"/> objects.
+                  A collection that stores <see cref='T:Hanselman.CST352.Instruction'/> objects.
             </summary>
-            <seealso cref="T:Hanselman.CST352.InstructionCollection"/>
+            <seealso cref='T:Hanselman.CST352.InstructionCollection'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.#ctor">
             <summary>
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.InstructionCollection'/>.
             </summary>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.#ctor(Hanselman.CST352.InstructionCollection)">
             <summary>
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/> based on another <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.InstructionCollection'/> based on another <see cref='T:Hanselman.CST352.InstructionCollection'/>.
             </summary>
-            <param name="value">
-                  A <see cref="T:Hanselman.CST352.InstructionCollection"/> from which the contents are copied
+            <param name='value'>
+                  A <see cref='T:Hanselman.CST352.InstructionCollection'/> from which the contents are copied
             </param>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.#ctor(Hanselman.CST352.Instruction[])">
             <summary>
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.InstructionCollection"/> containing any array of <see cref="T:Hanselman.CST352.Instruction"/> objects.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.InstructionCollection'/> containing any array of <see cref='T:Hanselman.CST352.Instruction'/> objects.
             </summary>
-            <param name="value">
-                  A array of <see cref="T:Hanselman.CST352.Instruction"/> objects with which to intialize the collection
+            <param name='value'>
+                  A array of <see cref='T:Hanselman.CST352.Instruction'/> objects with which to intialize the collection
             </param>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.Item(System.Int32)">
+            <summary>
+            Represents the entry at the specified index of the <see cref='T:Hanselman.CST352.Instruction'/>.
+            </summary>
+            <param name='index'>The zero-based index of the entry to locate in the collection.</param>
+            <value>
+               The entry at the specified index of the collection.
+            </value>
+            <exception cref='T:System.ArgumentOutOfRangeException'><paramref name='index'/> is outside the valid range of indexes for the collection.</exception>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)">
             <summary>
-               Adds a <see cref="T:Hanselman.CST352.Instruction"/> with the specified value to the 
-               <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+               Adds a <see cref='T:Hanselman.CST352.Instruction'/> with the specified value to the 
+               <see cref='T:Hanselman.CST352.InstructionCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to add.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Instruction'/> to add.</param>
             <returns>
                The index at which the new element was inserted.
             </returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.Instruction[])"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.Instruction[])'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.Instruction[])">
             <summary>
-            Copies the elements of an array to the end of the <see cref="T:Hanselman.CST352.InstructionCollection"/>.
+            Copies the elements of an array to the end of the <see cref='T:Hanselman.CST352.InstructionCollection'/>.
             </summary>
-            <param name="value">
-               An array of type <see cref="T:Hanselman.CST352.Instruction"/> containing the objects to add to the collection.
+            <param name='value'>
+               An array of type <see cref='T:Hanselman.CST352.Instruction'/> containing the objects to add to the collection.
             </param>
             <returns>
               None.
             </returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.AddRange(Hanselman.CST352.InstructionCollection)">
             <summary>
                 
-                  Adds the contents of another <see cref="T:Hanselman.CST352.InstructionCollection"/> to the end of the collection.
+                  Adds the contents of another <see cref='T:Hanselman.CST352.InstructionCollection'/> to the end of the collection.
                
             </summary>
-            <param name="value">
-               A <see cref="T:Hanselman.CST352.InstructionCollection"/> containing the objects to add to the collection.
+            <param name='value'>
+               A <see cref='T:Hanselman.CST352.InstructionCollection'/> containing the objects to add to the collection.
             </param>
             <returns>
               None.
             </returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.Contains(Hanselman.CST352.Instruction)">
             <summary>
             Gets a value indicating whether the 
-               <see cref="T:Hanselman.CST352.InstructionCollection"/> contains the specified <see cref="T:Hanselman.CST352.Instruction"/>.
+               <see cref='T:Hanselman.CST352.InstructionCollection'/> contains the specified <see cref='T:Hanselman.CST352.Instruction'/>.
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to locate.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Instruction'/> to locate.</param>
             <returns>
-            <see langword="true"/> if the <see cref="T:Hanselman.CST352.Instruction"/> is contained in the collection; 
-              otherwise, <see langword="false"/>.
+            <see langword='true'/> if the <see cref='T:Hanselman.CST352.Instruction'/> is contained in the collection; 
+              otherwise, <see langword='false'/>.
             </returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.IndexOf(Hanselman.CST352.Instruction)"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.IndexOf(Hanselman.CST352.Instruction)'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.CopyTo(Hanselman.CST352.Instruction[],System.Int32)">
             <summary>
-            Copies the <see cref="T:Hanselman.CST352.InstructionCollection"/> values to a one-dimensional <see cref="T:System.Array"/> instance at the 
+            Copies the <see cref='T:Hanselman.CST352.InstructionCollection'/> values to a one-dimensional <see cref='T:System.Array'/> instance at the 
                specified index.
             </summary>
-            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the values copied from <see cref="T:Hanselman.CST352.InstructionCollection"/> .</param>
-            <param name="index">The index in <paramref name="array"/> where copying begins.</param>
+            <param name='array'>The one-dimensional <see cref='T:System.Array'/> that is the destination of the values copied from <see cref='T:Hanselman.CST352.InstructionCollection'/> .</param>
+            <param name='index'>The index in <paramref name='array'/> where copying begins.</param>
             <returns>
               None.
             </returns>
-            <exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional. -or- The number of elements in the <see cref="T:Hanselman.CST352.InstructionCollection"/> is greater than the available space between <paramref name="arrayIndex"/> and the end of <paramref name="array"/>.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than <paramref name="array"/>'s lowbound. </exception>
-            <seealso cref="T:System.Array"/>
+            <exception cref='T:System.ArgumentException'><paramref name='array'/> is multidimensional. -or- The number of elements in the <see cref='T:Hanselman.CST352.InstructionCollection'/> is greater than the available space between <paramref name='arrayIndex'/> and the end of <paramref name='array'/>.</exception>
+            <exception cref='T:System.ArgumentNullException'><paramref name='array'/> is <see langword='null'/>. </exception>
+            <exception cref='T:System.ArgumentOutOfRangeException'><paramref name='arrayIndex'/> is less than <paramref name='array'/>'s lowbound. </exception>
+            <seealso cref='T:System.Array'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.IndexOf(Hanselman.CST352.Instruction)">
             <summary>
-               Returns the index of a <see cref="T:Hanselman.CST352.Instruction"/> in 
-                  the <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+               Returns the index of a <see cref='T:Hanselman.CST352.Instruction'/> in 
+                  the <see cref='T:Hanselman.CST352.InstructionCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to locate.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Instruction'/> to locate.</param>
             <returns>
-            The index of the <see cref="T:Hanselman.CST352.Instruction"/> of <paramref name="value"/> in the 
-            <see cref="T:Hanselman.CST352.InstructionCollection"/>, if found; otherwise, -1.
+            The index of the <see cref='T:Hanselman.CST352.Instruction'/> of <paramref name='value'/> in the 
+            <see cref='T:Hanselman.CST352.InstructionCollection'/>, if found; otherwise, -1.
             </returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.Contains(Hanselman.CST352.Instruction)"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.Contains(Hanselman.CST352.Instruction)'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.Insert(System.Int32,Hanselman.CST352.Instruction)">
             <summary>
-            Inserts a <see cref="T:Hanselman.CST352.Instruction"/> into the <see cref="T:Hanselman.CST352.InstructionCollection"/> at the specified index.
+            Inserts a <see cref='T:Hanselman.CST352.Instruction'/> into the <see cref='T:Hanselman.CST352.InstructionCollection'/> at the specified index.
             </summary>
-            <param name="index">The zero-based index where <paramref name="value"/> should be inserted.</param>
-            <param name=" value">The <see cref="T:Hanselman.CST352.Instruction"/> to insert.</param>
+            <param name='index'>The zero-based index where <paramref name='value'/> should be inserted.</param>
+            <param name=' value'>The <see cref='T:Hanselman.CST352.Instruction'/> to insert.</param>
             <returns>None.</returns>
-            <seealso cref="M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)"/>
+            <seealso cref='M:Hanselman.CST352.InstructionCollection.Add(Hanselman.CST352.Instruction)'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.GetEnumerator">
             <summary>
                Returns an enumerator that can iterate through 
-                  the <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+                  the <see cref='T:Hanselman.CST352.InstructionCollection'/> .
             </summary>
             <returns>None.</returns>
-            <seealso cref="T:System.Collections.IEnumerator"/>
+            <seealso cref='T:System.Collections.IEnumerator'/>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.Remove(Hanselman.CST352.Instruction)">
             <summary>
-                Removes a specific <see cref="T:Hanselman.CST352.Instruction"/> from the 
-               <see cref="T:Hanselman.CST352.InstructionCollection"/> .
+                Removes a specific <see cref='T:Hanselman.CST352.Instruction'/> from the 
+               <see cref='T:Hanselman.CST352.InstructionCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Instruction"/> to remove from the <see cref="T:Hanselman.CST352.InstructionCollection"/> .</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Instruction'/> to remove from the <see cref='T:Hanselman.CST352.InstructionCollection'/> .</param>
             <returns>None.</returns>
-            <exception cref="T:System.ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
-        </member>
-        <member name="P:Hanselman.CST352.InstructionCollection.Item(System.Int32)">
-            <summary>
-            Represents the entry at the specified index of the <see cref="T:Hanselman.CST352.Instruction"/>.
-            </summary>
-            <param name="index">The zero-based index of the entry to locate in the collection.</param>
-            <value>
-               The entry at the specified index of the collection.
-            </value>
-            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is outside the valid range of indexes for the collection.</exception>
+            <exception cref='T:System.ArgumentException'><paramref name='value'/> is not found in the Collection. </exception>
         </member>
         <member name="T:Hanselman.CST352.InstructionCollection.InstructionEnumerator">
             <summary>
@@ -661,6 +661,16 @@
             Public constructor for an InstructionEnumerator
             </summary>
             <param name="mappings">The <see cref="T:Hanselman.CST352.InstructionCollection"/>we are going to iterate over</param>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.Current">
+            <summary>
+            The current <see cref="T:Hanselman.CST352.Instruction"/>
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            The current IEnumerator interface
+            </summary>
         </member>
         <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.MoveNext">
             <summary>
@@ -682,16 +692,6 @@
         <member name="M:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#Reset">
             <summary>
             Reset the cursor
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.Current">
-            <summary>
-            The current <see cref="T:Hanselman.CST352.Instruction"/>
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.InstructionCollection.InstructionEnumerator.System#Collections#IEnumerator#Current">
-            <summary>
-            The current IEnumerator interface
             </summary>
         </member>
         <member name="T:Hanselman.CST352.MemoryManager">
@@ -783,7 +783,7 @@
             <param name="processMemoryIndex">The address in memory from the Process's point of view</param>
             <param name="dirtyFlag">Whether we mark this <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> as dirty or not</param>
             <returns>The physical address of the memory we requested</returns>
-            <exception cref="T:Hanselman.CST352.MemoryException">This process has accessed memory outside it's Process address space</exception>
+            <exception cref='T:Hanselman.CST352.MemoryException'>This process has accessed memory outside it's Process address space</exception>
         </member>
         <member name="M:Hanselman.CST352.MemoryManager.ResetPage(Hanselman.CST352.MemoryManager.MemoryPage)">
             <summary>
@@ -799,6 +799,14 @@
             <param name="page"></param>
             <param name="virtualIndex"></param>
             <returns></returns>
+        </member>
+        <member name="P:Hanselman.CST352.MemoryManager.Item(System.UInt32,System.UInt32)">
+            <summary>
+            Public accessor method to make Virtual Memory look like an array
+            </summary>
+            <example>
+            theOS.memoryMgr[processId, 5]; //accesses memory at address 5
+            </example>
         </member>
         <member name="M:Hanselman.CST352.MemoryManager.BytesToPages(System.UInt32)">
             <summary>
@@ -836,34 +844,6 @@
             </summary>
             <param name="bytes"># of bytes to assign</param>
             <param name="pid">Process ID</param>
-        </member>
-        <member name="M:Hanselman.CST352.MemoryManager.SwapOut(Hanselman.CST352.MemoryManager.MemoryPage)">
-            <summary>
-            Swaps the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to disk.  Currently implemented as XML for fun.
-            </summary>
-            <param name="victim">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to be swapped</param>
-        </member>
-        <member name="M:Hanselman.CST352.MemoryManager.SwapIn(Hanselman.CST352.MemoryManager.MemoryPage)">
-            <summary>
-            Swaps in the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> from disk.  Currently implemented as XML for fun.
-            </summary>
-            <param name="winner">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> that is being swapped in</param>
-        </member>
-        <member name="M:Hanselman.CST352.MemoryManager.PageFaultsForProcess(Hanselman.CST352.Process)">
-            <summary>
-            For statistical purposes only.  
-            Total up how many times this Process has been involved in a Page Fault
-            </summary>
-            <param name="p">The Process to total</param>
-            <returns>number of Page Faults</returns>
-        </member>
-        <member name="P:Hanselman.CST352.MemoryManager.Item(System.UInt32,System.UInt32)">
-            <summary>
-            Public accessor method to make Virtual Memory look like an array
-            </summary>
-            <example>
-            theOS.memoryMgr[processId, 5]; //accesses memory at address 5
-            </example>
         </member>
         <member name="T:Hanselman.CST352.MemoryManager.MemoryPage">
             <summary>
@@ -971,6 +951,26 @@
             <summary>
             For aging and swapping: When was this page last accessed?
             </summary>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.SwapOut(Hanselman.CST352.MemoryManager.MemoryPage)">
+            <summary>
+            Swaps the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to disk.  Currently implemented as XML for fun.
+            </summary>
+            <param name="victim">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> to be swapped</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.SwapIn(Hanselman.CST352.MemoryManager.MemoryPage)">
+            <summary>
+            Swaps in the specified <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> from disk.  Currently implemented as XML for fun.
+            </summary>
+            <param name="winner">The <see cref="T:Hanselman.CST352.MemoryManager.MemoryPage"/> that is being swapped in</param>
+        </member>
+        <member name="M:Hanselman.CST352.MemoryManager.PageFaultsForProcess(Hanselman.CST352.Process)">
+            <summary>
+            For statistical purposes only.  
+            Total up how many times this Process has been involved in a Page Fault
+            </summary>
+            <param name="p">The Process to total</param>
+            <returns>number of Page Faults</returns>
         </member>
         <member name="T:Hanselman.CST352.MemoryException">
             <summary>
@@ -1098,6 +1098,21 @@
         <member name="F:Hanselman.CST352.OS.events">
             <summary>
             There are 10 events, numbered 1 to 10.  Event 0 is not used
+            </summary>
+        </member>
+        <member name="T:Hanselman.CST352.OS.EventState">
+            <summary>
+            An event is either Signaled or NonSignaled
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.EventState.NonSignaled">
+            <summary>
+            Events are by default NonSignaled
+            </summary>
+        </member>
+        <member name="F:Hanselman.CST352.OS.EventState.Signaled">
+            <summary>
+            Events become Signaled, and Processes that are waiting on them wake up when Signaled
             </summary>
         </member>
         <member name="F:Hanselman.CST352.OS.processIdPool">
@@ -1507,21 +1522,6 @@
             <param name="processid">The Process ID</param>
             <returns>the uint from the stack</returns>
         </member>
-        <member name="T:Hanselman.CST352.OS.EventState">
-            <summary>
-            An event is either Signaled or NonSignaled
-            </summary>
-        </member>
-        <member name="F:Hanselman.CST352.OS.EventState.NonSignaled">
-            <summary>
-            Events are by default NonSignaled
-            </summary>
-        </member>
-        <member name="F:Hanselman.CST352.OS.EventState.Signaled">
-            <summary>
-            Events become Signaled, and Processes that are waiting on them wake up when Signaled
-            </summary>
-        </member>
         <member name="T:Hanselman.CST352.Process">
             <summary>
             Represents a running Process in the <see cref="F:Hanselman.CST352.OS.runningProcesses"/> table.  Implements <see cref="T:System.IComparable"/> 
@@ -1540,20 +1540,6 @@
             <summary>
             
             </summary>
-        </member>
-        <member name="M:Hanselman.CST352.Process.CompareTo(System.Object)">
-            <summary>
-            Needed to implement <see cref="T:System.IComparable"/>.  Compares Processes based on <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/>.
-            <pre>
-            Value                  Meaning 
-            --------------------------------------------------------
-            Less than zero         This instance is less than obj
-            Zero                   This instance is equal to obj 
-            Greater than an zero   This instance is greater than obj
-            </pre>
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
         </member>
         <member name="T:Hanselman.CST352.Process.ProcessControlBlock">
             <summary>
@@ -1688,6 +1674,20 @@
             Public get/set accessor for the Instruction Pointer
             </summary>
         </member>
+        <member name="M:Hanselman.CST352.Process.CompareTo(System.Object)">
+            <summary>
+            Needed to implement <see cref="T:System.IComparable"/>.  Compares Processes based on <see cref="F:Hanselman.CST352.Process.ProcessControlBlock.priority"/>.
+            <pre>
+            Value                  Meaning 
+            --------------------------------------------------------
+            Less than zero         This instance is less than obj
+            Zero                   This instance is equal to obj 
+            Greater than an zero   This instance is greater than obj
+            </pre>
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
         <member name="T:Hanselman.CST352.ProcessState">
             <summary>
             All the states a <see cref="T:Hanselman.CST352.Process"/> can experience.
@@ -1746,86 +1746,96 @@
         <member name="T:Hanselman.CST352.ProcessCollection">
             <summary>
                 
-                  A collection that stores <see cref="T:Hanselman.CST352.Process"/> objects.
+                  A collection that stores <see cref='T:Hanselman.CST352.Process'/> objects.
                
             </summary>
-            <seealso cref="T:Hanselman.CST352.ProcessCollection"/>
+            <seealso cref='T:Hanselman.CST352.ProcessCollection'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.#ctor">
             <summary>
                 
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.ProcessCollection'/>.
                
             </summary>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.#ctor(Hanselman.CST352.ProcessCollection)">
             <summary>
                 
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/> based on another <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.ProcessCollection'/> based on another <see cref='T:Hanselman.CST352.ProcessCollection'/>.
                
             </summary>
-            <param name="value">
-                  A <see cref="T:Hanselman.CST352.ProcessCollection"/> from which the contents are copied
+            <param name='value'>
+                  A <see cref='T:Hanselman.CST352.ProcessCollection'/> from which the contents are copied
             </param>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.#ctor(Hanselman.CST352.Process[])">
             <summary>
                 
-                  Initializes a new instance of <see cref="T:Hanselman.CST352.ProcessCollection"/> containing any array of <see cref="T:Hanselman.CST352.Process"/> objects.
+                  Initializes a new instance of <see cref='T:Hanselman.CST352.ProcessCollection'/> containing any array of <see cref='T:Hanselman.CST352.Process'/> objects.
                
             </summary>
-            <param name="value">
-                  A array of <see cref="T:Hanselman.CST352.Process"/> objects with which to intialize the collection
+            <param name='value'>
+                  A array of <see cref='T:Hanselman.CST352.Process'/> objects with which to intialize the collection
             </param>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.Item(System.Int32)">
+            <summary>
+            Represents the entry at the specified index of the <see cref='T:Hanselman.CST352.Process'/>.
+            </summary>
+            <param name='index'>The zero-based index of the entry to locate in the collection.</param>
+            <value>
+                The entry at the specified index of the collection.
+            </value>
+            <exception cref='T:System.ArgumentOutOfRangeException'><paramref name='index'/> is outside the valid range of indexes for the collection.</exception>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)">
             <summary>
-               Adds a <see cref="T:Hanselman.CST352.Process"/> with the specified value to the 
-               <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+               Adds a <see cref='T:Hanselman.CST352.Process'/> with the specified value to the 
+               <see cref='T:Hanselman.CST352.ProcessCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to add.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Process'/> to add.</param>
             <returns>
                The index at which the new element was inserted.
             </returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.Process[])"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.Process[])'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.Process[])">
             <summary>
-            Copies the elements of an array to the end of the <see cref="T:Hanselman.CST352.ProcessCollection"/>.
+            Copies the elements of an array to the end of the <see cref='T:Hanselman.CST352.ProcessCollection'/>.
             </summary>
-            <param name="value">
-               An array of type <see cref="T:Hanselman.CST352.Process"/> containing the objects to add to the collection.
+            <param name='value'>
+               An array of type <see cref='T:Hanselman.CST352.Process'/> containing the objects to add to the collection.
             </param>
             <returns>
               None.
             </returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.AddRange(Hanselman.CST352.ProcessCollection)">
             <summary>
                 
-                  Adds the contents of another <see cref="T:Hanselman.CST352.ProcessCollection"/> to the end of the collection.
+                  Adds the contents of another <see cref='T:Hanselman.CST352.ProcessCollection'/> to the end of the collection.
                
             </summary>
-            <param name="value">
-               A <see cref="T:Hanselman.CST352.ProcessCollection"/> containing the objects to add to the collection.
+            <param name='value'>
+               A <see cref='T:Hanselman.CST352.ProcessCollection'/> containing the objects to add to the collection.
             </param>
             <returns>
               None.
             </returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.Contains(Hanselman.CST352.Process)">
             <summary>
             Gets a value indicating whether the 
-               <see cref="T:Hanselman.CST352.ProcessCollection"/> contains the specified <see cref="T:Hanselman.CST352.Process"/>.
+               <see cref='T:Hanselman.CST352.ProcessCollection'/> contains the specified <see cref='T:Hanselman.CST352.Process'/>.
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to locate.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Process'/> to locate.</param>
             <returns>
-            <see langword="true"/> if the <see cref="T:Hanselman.CST352.Process"/> is contained in the collection; 
-              otherwise, <see langword="false"/>.
+            <see langword='true'/> if the <see cref='T:Hanselman.CST352.Process'/> is contained in the collection; 
+              otherwise, <see langword='false'/>.
             </returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.IndexOf(Hanselman.CST352.Process)"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.IndexOf(Hanselman.CST352.Process)'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.Compare(System.Object,System.Object)">
             <summary>
@@ -1842,66 +1852,56 @@
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.CopyTo(Hanselman.CST352.Process[],System.Int32)">
             <summary>
-            Copies the <see cref="T:Hanselman.CST352.ProcessCollection"/> values to a one-dimensional <see cref="T:System.Array"/> instance at the 
+            Copies the <see cref='T:Hanselman.CST352.ProcessCollection'/> values to a one-dimensional <see cref='T:System.Array'/> instance at the 
                specified index.
             </summary>
-            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the values copied from <see cref="T:Hanselman.CST352.ProcessCollection"/> .</param>
-            <param name="index">The index in <paramref name="array"/> where copying begins.</param>
+            <param name='array'>The one-dimensional <see cref='T:System.Array'/> that is the destination of the values copied from <see cref='T:Hanselman.CST352.ProcessCollection'/> .</param>
+            <param name='index'>The index in <paramref name='array'/> where copying begins.</param>
             <returns>
               None.
             </returns>
-            <exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional. -or- The number of elements in the <see cref="T:Hanselman.CST352.ProcessCollection"/> is greater than the available space between <paramref name="arrayIndex"/> and the end of <paramref name="array"/>.</exception>
-            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than <paramref name="array"/>'s lowbound. </exception>
-            <seealso cref="T:System.Array"/>
+            <exception cref='T:System.ArgumentException'><paramref name='array'/> is multidimensional. -or- The number of elements in the <see cref='T:Hanselman.CST352.ProcessCollection'/> is greater than the available space between <paramref name='arrayIndex'/> and the end of <paramref name='array'/>.</exception>
+            <exception cref='T:System.ArgumentNullException'><paramref name='array'/> is <see langword='null'/>. </exception>
+            <exception cref='T:System.ArgumentOutOfRangeException'><paramref name='arrayIndex'/> is less than <paramref name='array'/>'s lowbound. </exception>
+            <seealso cref='T:System.Array'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.IndexOf(Hanselman.CST352.Process)">
             <summary>
-               Returns the index of a <see cref="T:Hanselman.CST352.Process"/> in 
-                  the <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+               Returns the index of a <see cref='T:Hanselman.CST352.Process'/> in 
+                  the <see cref='T:Hanselman.CST352.ProcessCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to locate.</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Process'/> to locate.</param>
             <returns>
-            The index of the <see cref="T:Hanselman.CST352.Process"/> of <paramref name="value"/> in the 
-            <see cref="T:Hanselman.CST352.ProcessCollection"/>, if found; otherwise, -1.
+            The index of the <see cref='T:Hanselman.CST352.Process'/> of <paramref name='value'/> in the 
+            <see cref='T:Hanselman.CST352.ProcessCollection'/>, if found; otherwise, -1.
             </returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.Contains(Hanselman.CST352.Process)"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.Contains(Hanselman.CST352.Process)'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.Insert(System.Int32,Hanselman.CST352.Process)">
             <summary>
-            Inserts a <see cref="T:Hanselman.CST352.Process"/> into the <see cref="T:Hanselman.CST352.ProcessCollection"/> at the specified index.
+            Inserts a <see cref='T:Hanselman.CST352.Process'/> into the <see cref='T:Hanselman.CST352.ProcessCollection'/> at the specified index.
             </summary>
-            <param name="index">The zero-based index where <paramref name="value"/> should be inserted.</param>
-            <param name=" value">The <see cref="T:Hanselman.CST352.Process"/> to insert.</param>
+            <param name='index'>The zero-based index where <paramref name='value'/> should be inserted.</param>
+            <param name=' value'>The <see cref='T:Hanselman.CST352.Process'/> to insert.</param>
             <returns>None.</returns>
-            <seealso cref="M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)"/>
+            <seealso cref='M:Hanselman.CST352.ProcessCollection.Add(Hanselman.CST352.Process)'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.GetEnumerator">
             <summary>
                Returns an enumerator that can iterate through 
-                  the <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+                  the <see cref='T:Hanselman.CST352.ProcessCollection'/> .
             </summary>
             <returns>None.</returns>
-            <seealso cref="T:System.Collections.IEnumerator"/>
+            <seealso cref='T:System.Collections.IEnumerator'/>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.Remove(Hanselman.CST352.Process)">
             <summary>
-                Removes a specific <see cref="T:Hanselman.CST352.Process"/> from the 
-               <see cref="T:Hanselman.CST352.ProcessCollection"/> .
+                Removes a specific <see cref='T:Hanselman.CST352.Process'/> from the 
+               <see cref='T:Hanselman.CST352.ProcessCollection'/> .
             </summary>
-            <param name="value">The <see cref="T:Hanselman.CST352.Process"/> to remove from the <see cref="T:Hanselman.CST352.ProcessCollection"/> .</param>
+            <param name='value'>The <see cref='T:Hanselman.CST352.Process'/> to remove from the <see cref='T:Hanselman.CST352.ProcessCollection'/> .</param>
             <returns>None.</returns>
-            <exception cref="T:System.ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
-        </member>
-        <member name="P:Hanselman.CST352.ProcessCollection.Item(System.Int32)">
-            <summary>
-            Represents the entry at the specified index of the <see cref="T:Hanselman.CST352.Process"/>.
-            </summary>
-            <param name="index">The zero-based index of the entry to locate in the collection.</param>
-            <value>
-                The entry at the specified index of the collection.
-            </value>
-            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is outside the valid range of indexes for the collection.</exception>
+            <exception cref='T:System.ArgumentException'><paramref name='value'/> is not found in the Collection. </exception>
         </member>
         <member name="T:Hanselman.CST352.ProcessCollection.ProcessEnumerator">
             <summary>
@@ -1913,6 +1913,16 @@
             Public constructor for an ProcessEnumerator
             </summary>
             <param name="mappings">The <see cref="T:Hanselman.CST352.ProcessCollection"/>we are going to iterate over</param>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.Current">
+            <summary>
+            The current <see cref="T:Hanselman.CST352.Process"/>
+            </summary>
+        </member>
+        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#Current">
+            <summary>
+            The current IEnumerator interface
+            </summary>
         </member>
         <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.MoveNext">
             <summary>
@@ -1934,16 +1944,6 @@
         <member name="M:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#Reset">
             <summary>
             Reset the cursor
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.Current">
-            <summary>
-            The current <see cref="T:Hanselman.CST352.Process"/>
-            </summary>
-        </member>
-        <member name="P:Hanselman.CST352.ProcessCollection.ProcessEnumerator.System#Collections#IEnumerator#Current">
-            <summary>
-            The current IEnumerator interface
             </summary>
         </member>
         <member name="T:Hanselman.CST352.Program">

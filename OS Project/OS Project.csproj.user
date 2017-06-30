@@ -1,48 +1,51 @@
-<VisualStudioProject>
-    <CSHARP>
-        <Build>
-            <Settings ReferencePath = "" >
-                <Config
-                    Name = "Debug"
-                    EnableASPDebugging = "false"
-                    EnableASPXDebugging = "false"
-                    EnableUnmanagedDebugging = "false"
-                    EnableSQLServerDebugging = "false"
-                    RemoteDebugEnabled = "false"
-                    RemoteDebugMachine = ""
-                    StartAction = "Project"
-                    StartArguments = "1024 prog3.txt idle-n.txt"
-                    StartPage = ""
-                    StartProgram = ""
-                    StartURL = ""
-                    StartWorkingDirectory = ""
-                    StartWithIE = "false"
-                />
-                <Config
-                    Name = "Release"
-                    EnableASPDebugging = "false"
-                    EnableASPXDebugging = "false"
-                    EnableUnmanagedDebugging = "false"
-                    EnableSQLServerDebugging = "false"
-                    RemoteDebugEnabled = "false"
-                    RemoteDebugMachine = ""
-                    StartAction = "Project"
-                    StartArguments = ""
-                    StartPage = ""
-                    StartProgram = ""
-                    StartURL = ""
-                    StartWorkingDirectory = ""
-                    StartWithIE = "false"
-                />
-            </Settings>
-        </Build>
-        <OtherProjectSettings
-            CopyProjectDestinationFolder = ""
-            CopyProjectUncPath = ""
-            CopyProjectOption = "0"
-            ProjectView = "ProjectFiles"
-            ProjectTrust = "0"
-        />
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ReferencePath />
+    <CopyProjectDestinationFolder />
+    <CopyProjectUncPath />
+    <CopyProjectOption>0</CopyProjectOption>
+    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectTrust>0</ProjectTrust>
+    <PublishUrlHistory />
+    <InstallUrlHistory />
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <EnableASPDebugging>false</EnableASPDebugging>
+    <EnableASPXDebugging>false</EnableASPXDebugging>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <EnableSQLServerDebugging>false</EnableSQLServerDebugging>
+    <RemoteDebugEnabled>false</RemoteDebugEnabled>
+    <RemoteDebugMachine />
+    <StartAction>Project</StartAction>
+    <StartArguments>1024 prog3.txt idle-n.txt</StartArguments>
+    <StartPage />
+    <StartProgram />
+    <StartURL />
+    <StartWorkingDirectory />
+    <StartWithIE>false</StartWithIE>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <EnableASPDebugging>false</EnableASPDebugging>
+    <EnableASPXDebugging>false</EnableASPXDebugging>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <EnableSQLServerDebugging>false</EnableSQLServerDebugging>
+    <RemoteDebugEnabled>false</RemoteDebugEnabled>
+    <RemoteDebugMachine />
+    <StartAction>Project</StartAction>
+    <StartArguments />
+    <StartPage />
+    <StartProgram />
+    <StartURL />
+    <StartWorkingDirectory />
+    <StartWithIE>false</StartWithIE>
+  </PropertyGroup>
+</Project>

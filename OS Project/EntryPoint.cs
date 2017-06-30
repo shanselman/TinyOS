@@ -67,7 +67,7 @@ namespace Hanselman.CST352
 					bytesOfVirtualMemory = uint.Parse(args[0]);
 					AppSettingsReader appreader = new AppSettingsReader();
 					
-					bytesOfPhysicalMemory = uint.Parse(ConfigurationSettings.AppSettings["PhysicalMemory"]);
+					bytesOfPhysicalMemory = uint.Parse(ConfigurationManager.AppSettings["PhysicalMemory"]);
 
 					// Setup static physical memory
 					CPU.initPhysicalMemory(bytesOfPhysicalMemory); 
@@ -87,8 +87,8 @@ namespace Hanselman.CST352
 						if (File.Exists(args[i]))
 						{
 							Program p = Program.LoadProgram(args[i]);
-							Process rp = theOS.createProcess(p, uint.Parse(ConfigurationSettings.AppSettings["ProcessMemory"]));
-							Console.WriteLine("Process id {0} has {1} bytes of process memory and {2} bytes of heap",rp.PCB.pid,ConfigurationSettings.AppSettings["ProcessMemory"],rp.PCB.heapAddrEnd-rp.PCB.heapAddrStart);
+							Process rp = theOS.createProcess(p, uint.Parse(ConfigurationManager.AppSettings["ProcessMemory"]));
+							Console.WriteLine("Process id {0} has {1} bytes of process memory and {2} bytes of heap",rp.PCB.pid,ConfigurationManager.AppSettings["ProcessMemory"],rp.PCB.heapAddrEnd-rp.PCB.heapAddrStart);
 							p.DumpProgram();
 						}
 					}

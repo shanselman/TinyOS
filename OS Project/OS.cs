@@ -115,7 +115,7 @@ namespace Hanselman.CST352
 		public OS(uint virtualMemoryBytes)
 		{
 			memoryMgr = new MemoryManager(virtualMemoryBytes);
-			bDumpInstructions = bool.Parse(ConfigurationSettings.AppSettings["DumpInstruction"]);
+			bDumpInstructions = bool.Parse(ConfigurationManager.AppSettings["DumpInstruction"]);
 		}
 
 		/// <summary>
@@ -181,7 +181,7 @@ namespace Hanselman.CST352
 				if (runningProcesses.Count == 0) 
 				{
 					Console.WriteLine("No Processes");
-					if (bool.Parse(ConfigurationSettings.AppSettings["PauseOnExit"]) == true)System.Console.ReadLine();
+					if (bool.Parse(ConfigurationManager.AppSettings["PauseOnExit"]) == true)System.Console.ReadLine();
 					System.Environment.Exit(0);
 				}
 				else
@@ -334,7 +334,7 @@ namespace Hanselman.CST352
 		/// </summary>
 		public void DumpContextSwitchIn()
 		{
-			if (bool.Parse(ConfigurationSettings.AppSettings["DumpContextSwitch"]) == false)
+			if (bool.Parse(ConfigurationManager.AppSettings["DumpContextSwitch"]) == false)
 				return;
 			Console.WriteLine("Switching in Process {0} with ip at {1}",currentProcess.PCB.pid,currentProcess.PCB.ip);
 		}
@@ -345,7 +345,7 @@ namespace Hanselman.CST352
 		/// </summary>
 		public void DumpContextSwitchOut()
 		{
-			if (bool.Parse(ConfigurationSettings.AppSettings["DumpContextSwitch"]) == false)
+			if (bool.Parse(ConfigurationManager.AppSettings["DumpContextSwitch"]) == false)
 				return;
 			Console.WriteLine("Switching out Process {0} with ip at {1}",currentProcess.PCB.pid,CPU.ip);
 		}
@@ -428,7 +428,7 @@ namespace Hanselman.CST352
 			// Set stack pointer at the end of memory
 			//
 			p.PCB.sp = memorySize-1;
-			p.PCB.stackSize = uint.Parse(ConfigurationSettings.AppSettings["StackSize"]);
+			p.PCB.stackSize = uint.Parse(ConfigurationManager.AppSettings["StackSize"]);
 
 			//
 			// SETUP CODE SECTION
@@ -445,7 +445,7 @@ namespace Hanselman.CST352
 			// Point Global Data just after the Code for now...
 			//
 			p.PCB.registers[9] = (uint)roundedCodeLength; 
-			p.PCB.dataSize = uint.Parse(ConfigurationSettings.AppSettings["DataSize"]);
+			p.PCB.dataSize = uint.Parse(ConfigurationManager.AppSettings["DataSize"]);
 
 			//
 			// SETUP HEAP SECTION
