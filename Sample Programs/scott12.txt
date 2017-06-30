@@ -1,0 +1,14 @@
+6	r1, $1		;move 1 into r1
+29	r1, r2		;map shared mem region #r1, return addr inr2
+11	r2		;print r2
+6	r5, $1		;event 1
+31	r5		;wait on 1
+12	r2		;print out shared mem
+2	r2, $4		;add 4
+12	r2
+2	r2, $4		;add 4
+12	r2
+2	r2, $4		;add 4
+12	r2
+2	r2, $4		;add 4
+27

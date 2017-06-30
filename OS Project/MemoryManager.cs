@@ -108,8 +108,8 @@ namespace Hanselman.CST352
 			//
 			// Cordon off some shared memory regions...these are setting the AppSettings
 			//
-			uint SharedRegionsSize = uint.Parse(ConfigurationManager.AppSettings["SharedMemoryRegionSize"]);
-			uint SharedRegions = uint.Parse(ConfigurationManager.AppSettings["NumOfSharedMemoryRegions"]);
+			uint SharedRegionsSize = uint.Parse(EntryPoint.Configuration["SharedMemoryRegionSize"]);
+			uint SharedRegions = uint.Parse(EntryPoint.Configuration["NumOfSharedMemoryRegions"]);
 			if (SharedRegions > 0 && SharedRegionsSize > 0)
 			{
 				uint TotalPagesNeeded = (uint)(SharedRegions*SharedRegionsSize/CPU.pageSize);
@@ -566,7 +566,7 @@ namespace Hanselman.CST352
 		/// <returns>the index in process memory of the shared region</returns>
 		public uint MapSharedMemoryToProcess(uint memoryRegion, uint pid)
 		{
-			uint SharedRegionsSize = uint.Parse(ConfigurationManager.AppSettings["SharedMemoryRegionSize"]);
+			uint SharedRegionsSize = uint.Parse(EntryPoint.Configuration["SharedMemoryRegionSize"]);
 			uint PagesNeeded = (uint)(SharedRegionsSize/CPU.pageSize);
 
 			uint startAddrProcessIndex;

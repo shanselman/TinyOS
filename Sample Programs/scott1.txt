@@ -1,0 +1,12 @@
+6   	r1, $3276834	;move a big number into r1
+7   	r2, r1		;move r1 to r2
+11  	r2    		;print r2
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+2	r2, $5	     	;increment r2 by 5       
+11  	r2    		;print r2
+27               	;exit.

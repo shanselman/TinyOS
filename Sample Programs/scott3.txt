@@ -1,0 +1,21 @@
+6	r1, $99		;move 99 into r1
+4	r1		;push r1 onto the stack
+6	r1, $11		;move 11 into r1
+4	r1		;push r1 onto the stack
+1	r1		;incr r1
+35	r1		;pop off the stack into r1
+6	r3, $252	;move 252 into r3
+12	r3		;print memory at r3
+6	r3, $150	;put 150 into r3
+36	r3		;pop off the stack into memory at r3
+12	r3		;print memory at r3
+5	$88		;push 88 onto the stack
+5	$77		;push 77 onto the stack
+5	$66		;push 66 onto the stack
+35	r2		;pop off the stack into r2
+11	r2		;print r2
+35	r2		;pop off the stack into r2
+11	r2		;print r2
+35	r2		;pop off the stack into r2
+11	r2		;print r2
+27               	;exit

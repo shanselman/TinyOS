@@ -1,0 +1,9 @@
+6	r1, $1		;move 1 into r1
+6	r2, $22		;move 22 into r2
+6	r3, $33		;move 33 into r3
+6	r4, $44		;move 44 into r4
+6	r5, $55		;move 55 into r5
+6	r6, $66		;move 66 into r6
+6	r1, $1		;move 1 into r1
+30	r1		;signal event #1
+27

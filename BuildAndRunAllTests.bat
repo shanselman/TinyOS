@@ -1,6 +1,9 @@
+pushd .
+cd "OS Project"
 msbuild /p:Configuration=Debug
-copy ".\Sample Programs\*" bin\Debug
+copy "..\Sample Programs\*" bin\Debug
 pushd .
 cd bin\Debug
 call testAll.bat
+popd
 popd
