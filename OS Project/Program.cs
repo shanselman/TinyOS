@@ -101,17 +101,19 @@ namespace Hanselman.CST352
 		/// <returns>a new loaded Program</returns>
 		public static Program LoadProgram(string fileName) 
 		{
-			TextReader t = File.OpenText(fileName);
-			InstructionCollection instructions = new InstructionCollection();
-			string strRawInstruction = t.ReadLine();
-			while (strRawInstruction != null)
-			{
-				instructions.Add(new Instruction(strRawInstruction));
-				strRawInstruction = t.ReadLine();
-			}
-			Program p = new Program(instructions);
-			t.Close();
-			return p;
+            using (TextReader t = File.OpenText(fileName))
+            {
+                InstructionCollection instructions = new InstructionCollection();
+                string strRawInstruction = t.ReadLine();
+                while (strRawInstruction != null)
+                {
+                    instructions.Add(new Instruction(strRawInstruction));
+                    strRawInstruction = t.ReadLine();
+                }
+                Program p = new Program(instructions);
+                t.Close();
+                return p;
+            }
 		}
 
 		/// <summary>
