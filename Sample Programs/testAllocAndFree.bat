@@ -1,1 +1,1 @@
-OS 512 scott13.txt
+dotnet netcoreapp2.0/TinyOSCore.dll 512 scott13.txt  

@@ -1,1 +1,1 @@
-OS 7000 scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt 
+dotnet netcoreapp2.0/TinyOSCore.dll 7000 scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt scott1.txt scott2.txt 

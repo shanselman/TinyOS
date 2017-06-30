@@ -1,1 +1,1 @@
-OS 1024 scott11.txt scott12.txt
+dotnet netcoreapp2.0/TinyOSCore.dll 1024 scott11.txt scott12.txt
