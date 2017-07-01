@@ -1,0 +1,12 @@
+6	r5, $100	;move 100 into r5 (how many times we'll run)
+6	r4, $0		;move 0 into r4
+6	r6, $14		;how many bytes to jump forward to exit
+26	r4		;lower our priority TO 0
+6	r1, $20 	;move 20 into r1
+11	r1		;print the number 20
+1	r3		;incr r3 (our counter)
+15	r3, r5		;compare r3 and r5
+18	r6		;if r3 and r5 equal, jump r6
+6	r2, $-38	;back up the ip 38
+13	r2		;loop forever (jump back 38)
+27			;exit - this program is the same idle loop, but only is idle for r5 clock cycles

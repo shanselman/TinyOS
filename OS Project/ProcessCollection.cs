@@ -110,7 +110,7 @@ namespace Hanselman.CST352
 		/// <returns>
 		///    The index at which the new element was inserted.
 		/// </returns>
-		/// <seealso cref='Hanselman.CST352.ProcessCollection.AddRange'/>
+		/// <seealso cref='Hanselman.CST352.ProcessCollection.AddRange(ProcessCollection)'/>
 		public int Add(Process value) 
 		{
 			return List.Add(value);
@@ -201,9 +201,9 @@ namespace Hanselman.CST352
         /// <returns>
         ///   None.
         /// </returns>
-        /// <exception cref='System.ArgumentException'><paramref name='array'/> is multidimensional. -or- The number of elements in the <see cref='Hanselman.CST352.ProcessCollection'/> is greater than the available space between <paramref name='arrayIndex'/> and the end of <paramref name='array'/>.</exception>
+        /// <exception cref='System.ArgumentException'><paramref name='array'/> is multidimensional. -or- The number of elements in the <see cref='Hanselman.CST352.ProcessCollection'/> is greater than the available space between <paramref name='index'/> and the end of <paramref name='array'/>.</exception>
         /// <exception cref='System.ArgumentNullException'><paramref name='array'/> is <see langword='null'/>. </exception>
-        /// <exception cref='System.ArgumentOutOfRangeException'><paramref name='arrayIndex'/> is less than <paramref name='array'/>'s lowbound. </exception>
+        /// <exception cref='System.ArgumentOutOfRangeException'><paramref name='index'/> is less than <paramref name='array'/>'s lowbound. </exception>
         /// <seealso cref='System.Array'/>
         public void CopyTo(Process[] array, int index) {
             List.CopyTo(array, index);

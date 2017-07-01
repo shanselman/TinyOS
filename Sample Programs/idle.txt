@@ -1,0 +1,6 @@
+6	r4, $0		;move 0 into r4
+26	r4		;lower our priority TO 0
+6	r1, $20 	;move 20 into r1
+11	r1		;print the number 20
+6	r2, $-19	;back up the ip 19
+13	r2		;loop forever (jump back 19)

@@ -35,6 +35,8 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hanselman.CST352
 {
@@ -45,13 +47,19 @@ namespace Hanselman.CST352
 	/// </summary>
 	class EntryPoint
 	{
+        public static IConfigurationRoot Configuration { get; set; }
+
 		/// <summary>
 		/// The entry point for the virtual OS
 		/// </summary>
 		[STAThread]
 		static void Main(string[] args)
 		{
-			OS theOS = null;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+            Configuration = builder.Build();
+
+            OS theOS = null;
 			uint bytesOfVirtualMemory = 0;
 			uint bytesOfPhysicalMemory = 0;
 			
@@ -65,9 +73,8 @@ namespace Hanselman.CST352
 				{
 					// Total addressable (virtual) memory taken from the command line
 					bytesOfVirtualMemory = uint.Parse(args[0]);
-					AppSettingsReader appreader = new AppSettingsReader();
 					
-					bytesOfPhysicalMemory = uint.Parse(ConfigurationManager.AppSettings["PhysicalMemory"]);
+					bytesOfPhysicalMemory = uint.Parse(Configuration["PhysicalMemory"]);
 
 					// Setup static physical memory
 					CPU.initPhysicalMemory(bytesOfPhysicalMemory); 
@@ -87,8 +94,8 @@ namespace Hanselman.CST352
 						if (File.Exists(args[i]))
 						{
 							Program p = Program.LoadProgram(args[i]);
-							Process rp = theOS.createProcess(p, uint.Parse(ConfigurationManager.AppSettings["ProcessMemory"]));
-							Console.WriteLine("Process id {0} has {1} bytes of process memory and {2} bytes of heap",rp.PCB.pid,ConfigurationManager.AppSettings["ProcessMemory"],rp.PCB.heapAddrEnd-rp.PCB.heapAddrStart);
+							Process rp = theOS.createProcess(p, uint.Parse(Configuration["ProcessMemory"]));
+							Console.WriteLine("Process id {0} has {1} bytes of process memory and {2} bytes of heap",rp.PCB.pid,Configuration["ProcessMemory"],rp.PCB.heapAddrEnd-rp.PCB.heapAddrStart);
 							p.DumpProgram();
 						}
 					}

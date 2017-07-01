@@ -121,7 +121,7 @@ namespace Hanselman.CST352
 		/// </summary>
 		public void DumpProgram()
 		{
-			if (bool.Parse(ConfigurationManager.AppSettings["DumpProgram"]) == false)
+			if (bool.Parse(EntryPoint.Configuration["DumpProgram"]) == false)
 				return;
 
 			foreach (Instruction i in this.instructions)
