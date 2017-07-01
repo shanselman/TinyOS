@@ -1,6 +1,6 @@
 pushd .
 cd "OS Project"
-msbuild /p:Configuration=Debug
+dotnet build -c DEBUG
 copy "..\Sample Programs\*" bin\Debug
 pushd .
 cd bin\Debug
