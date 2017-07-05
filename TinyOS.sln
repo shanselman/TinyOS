@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26621.2
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1C4F21C7-9F73-44AB-BABA-37B63FD55C88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyOSCore", "src\TinyOSCore\TinyOSCore.csproj", "{47BD5898-A552-42BC-86C3-231E04FB84DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C405F39-2520-4BEE-90BC-FDBD4FFD46B7}"
+	ProjectSection(SolutionItems) = preProject
+		BuildAndRunAllTests.bat = BuildAndRunAllTests.bat
+		BuildAndRunAllTests.sh = BuildAndRunAllTests.sh
+		LICENSE = LICENSE
+		originalassignment.md = originalassignment.md
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Programs", "Sample Programs", "{0B333DF1-4A80-4442-BBF7-78AD4BA25AC3}"
+	ProjectSection(SolutionItems) = preProject
+		Sample Programs\idle-n.txt = Sample Programs\idle-n.txt
+		Sample Programs\idle.txt = Sample Programs\idle.txt
+		Sample Programs\prog1.txt = Sample Programs\prog1.txt
+		Sample Programs\prog2.txt = Sample Programs\prog2.txt
+		Sample Programs\prog3.txt = Sample Programs\prog3.txt
+		Sample Programs\readme.txt = Sample Programs\readme.txt
+		Sample Programs\scott1.txt = Sample Programs\scott1.txt
+		Sample Programs\scott10.txt = Sample Programs\scott10.txt
+		Sample Programs\scott11.txt = Sample Programs\scott11.txt
+		Sample Programs\scott12.txt = Sample Programs\scott12.txt
+		Sample Programs\scott13.txt = Sample Programs\scott13.txt
+		Sample Programs\scott2.txt = Sample Programs\scott2.txt
+		Sample Programs\scott3.txt = Sample Programs\scott3.txt
+		Sample Programs\scott4.txt = Sample Programs\scott4.txt
+		Sample Programs\scott5.txt = Sample Programs\scott5.txt
+		Sample Programs\scott6.txt = Sample Programs\scott6.txt
+		Sample Programs\scott7.txt = Sample Programs\scott7.txt
+		Sample Programs\scott8.txt = Sample Programs\scott8.txt
+		Sample Programs\scott9.txt = Sample Programs\scott9.txt
+		Sample Programs\testAll.bat = Sample Programs\testAll.bat
+		Sample Programs\testAll.sh = Sample Programs\testAll.sh
+		Sample Programs\testAllocAndFree.bat = Sample Programs\testAllocAndFree.bat
+		Sample Programs\testCalls.bat = Sample Programs\testCalls.bat
+		Sample Programs\testEvents.bat = Sample Programs\testEvents.bat
+		Sample Programs\testJumps.bat = Sample Programs\testJumps.bat
+		Sample Programs\testLocks.bat = Sample Programs\testLocks.bat
+		Sample Programs\testMemoryProtection.bat = Sample Programs\testMemoryProtection.bat
+		Sample Programs\testMulti.bat = Sample Programs\testMulti.bat
+		Sample Programs\testMultiSuper.bat = Sample Programs\testMultiSuper.bat
+		Sample Programs\testRegisters.bat = Sample Programs\testRegisters.bat
+		Sample Programs\testSharedMem.bat = Sample Programs\testSharedMem.bat
+		Sample Programs\testStack.bat = Sample Programs\testStack.bat
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47BD5898-A552-42BC-86C3-231E04FB84DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47BD5898-A552-42BC-86C3-231E04FB84DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47BD5898-A552-42BC-86C3-231E04FB84DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47BD5898-A552-42BC-86C3-231E04FB84DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{47BD5898-A552-42BC-86C3-231E04FB84DD} = {1C4F21C7-9F73-44AB-BABA-37B63FD55C88}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC60F6D1-76C5-4C77-9BA8-D10F577809EC}
+	EndGlobalSection
+EndGlobal
