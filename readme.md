@@ -1,6 +1,6 @@
 # Scott Hanselman's Tiny Virtual Operating System and Abstract Machine in C#
 
-<img src="https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true" alt="Project Badge" width="300">
+[![Build status](https://ci.appveyor.com/api/projects/status/vb8k3n8e7y77kijw?svg=true)](https://ci.appveyor.com/project/ScottHanselman/tinyos)
 
 ## What is this?
 
