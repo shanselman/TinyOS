@@ -33,7 +33,7 @@
 //
 using System;
 using System.Diagnostics;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
@@ -49,15 +49,15 @@ namespace Hanselman.CST352
 	/// </summary>
 	public delegate void SystemCall();
 
-	/// <summary>
-	/// The definition of an Operarting System, including a <see cref="MemoryManager"/> and a <see cref="ProcessCollection"/>
-	/// </summary>
-	public class OS
+    /// <summary>
+    /// The definition of an Operarting System, including a <see cref="MemoryManager"/> and a <see cref="List{Instruction}"/>
+    /// </summary>
+    public class OS
 	{
 		/// <summary>
 		/// Contains the <see cref="Process"/> and the <see cref="ProcessControlBlock"/> for all runningProcesses
 		/// </summary>
-		private ProcessCollection runningProcesses = new ProcessCollection();
+		private List<Process> runningProcesses = new List<Process>();
 		/// <summary>
 		/// Holds a reference to the current running <see cref="Process"/>
 		/// </summary>

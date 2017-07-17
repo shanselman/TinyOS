@@ -32,20 +32,21 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Hanselman.CST352
 {
-	/// <summary>
-	/// Represents a single line in a program, consisting of an <see cref="OpCode"/> 
-	/// and one or two optional parameters.  An instruction can parse a raw instruction from a test file.
-	/// Tge instruction is then loaded into an <see cref="InstructionCollection"/> which is a member of
-	/// <see cref="Program"/>.  The <see cref="InstructionCollection"/> is translated into bytes that are 
-	/// loaded into the processes memory space.  It's never used again, but it's a neat overly object oriented
-	/// construct that simplified the coding of the creation of a <see cref="Program"/> and complicated the 
-	/// running of the whole system.  It was worth it though.
-	/// </summary>
-	public class Instruction
+    /// <summary>
+    /// Represents a single line in a program, consisting of an <see cref="OpCode"/> 
+    /// and one or two optional parameters.  An instruction can parse a raw instruction from a test file.
+    /// Tge instruction is then loaded into an <see cref="List{Instruction}"/> which is a member of
+    /// <see cref="Program"/>.  The <see cref="List{Instruction}"/> is translated into bytes that are 
+    /// loaded into the processes memory space.  It's never used again, but it's a neat overly object oriented
+    /// construct that simplified the coding of the creation of a <see cref="Program"/> and complicated the 
+    /// running of the whole system.  It was worth it though.
+    /// </summary>
+    public class Instruction
 	{
 
 		/// <summary>

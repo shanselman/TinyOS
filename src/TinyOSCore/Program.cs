@@ -32,7 +32,7 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 //
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Configuration;
 
@@ -44,25 +44,25 @@ namespace Hanselman.CST352
 	/// </summary>
 	public class Program
 	{
-		private InstructionCollection instructions = null;
+		private IList<Instruction> instructions = null;
 
 		/// <summary>
 		/// Public constructor for a Program
 		/// </summary>
 		/// <param name="instructionsParam">The collection of <see cref="Instruction"/> objects that make up this Program</param>
-		public Program(InstructionCollection instructionsParam)
+		public Program(IEnumerable<Instruction> instructionsParam)
 		{
-			instructions = new InstructionCollection(instructionsParam);
+			instructions = new List<Instruction>(instructionsParam);
 		}
 
-		/// <summary>
-		/// Spins through the <see cref="InstructionCollection"/> and creates an array of bytes 
-		/// that is then copied into Memory by <see cref="OS.createProcess"/>
-		/// </summary>
-		/// <returns>Array of bytes representing the <see cref="Program"/> in memory</returns>
-		unsafe public byte[] GetMemoryImage()
+        /// <summary>
+        /// Spins through the <see cref="List{Instruction}"/> and creates an array of bytes 
+        /// that is then copied into Memory by <see cref="OS.createProcess"/>
+        /// </summary>
+        /// <returns>Array of bytes representing the <see cref="Program"/> in memory</returns>
+        unsafe public byte[] GetMemoryImage()
 		{
-			ArrayList arrayListInstr = new ArrayList();
+			List<byte> arrayListInstr = new List<byte>();
 
 			foreach (Instruction instr in instructions)
 			{
@@ -86,24 +86,24 @@ namespace Hanselman.CST352
 			}
 			
 			// Create and array of bytes and return the instructions in it
-			arrayListInstr.TrimToSize();
+			arrayListInstr.Capacity = arrayListInstr.Count;
 			byte[] arrayInstr = new byte[arrayListInstr.Count];
-			arrayListInstr.CopyTo(arrayInstr);
+			arrayListInstr.CopyTo(arrayInstr, 0);
 			return arrayInstr;
 		}
 
-		/// <summary>
-		/// Loads a Program from a file on disk.  For each line the Program, create an <see cref="Instruction"/>
-		/// and pass the raw string to the Instructions's constructor.  The resulting <see cref="InstructionCollection"/>
-		/// is the Program
-		/// </summary>
-		/// <param name="fileName">file with code to load</param>
-		/// <returns>a new loaded Program</returns>
-		public static Program LoadProgram(string fileName) 
+        /// <summary>
+        /// Loads a Program from a file on disk.  For each line the Program, create an <see cref="Instruction"/>
+        /// and pass the raw string to the Instructions's constructor.  The resulting <see cref="List{Instruction}"/>
+        /// is the Program
+        /// </summary>
+        /// <param name="fileName">file with code to load</param>
+        /// <returns>a new loaded Program</returns>
+        public static Program LoadProgram(string fileName) 
 		{
             using (TextReader t = File.OpenText(fileName))
             {
-                InstructionCollection instructions = new InstructionCollection();
+                IList<Instruction> instructions = new List<Instruction>();
                 string strRawInstruction = t.ReadLine();
                 while (strRawInstruction != null)
                 {

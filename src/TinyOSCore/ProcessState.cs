@@ -34,6 +34,8 @@
 // ReSharper disable once CheckNamespace
 namespace Hanselman.CST352
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// All the states a <see cref="Process"/> can experience.
     /// </summary>
@@ -70,7 +72,7 @@ namespace Hanselman.CST352
         WaitingOnEvent,
 
         /// <summary>
-        /// The state of a <see cref="Process"/> waiting to be removed from the Running <see cref="ProcessCollection"/>
+        /// The state of a <see cref="Process"/> waiting to be removed from the Running <see cref="List{T}"/>
         /// </summary>
         Terminated
     }
