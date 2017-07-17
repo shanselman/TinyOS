@@ -55,7 +55,7 @@ namespace Hanselman.CST352
 	public class OS
 	{
 		/// <summary>
-		/// Contains the <see cref="Process"/> and the <see cref="Process.ProcessControlBlock"/> for all runningProcesses
+		/// Contains the <see cref="Process"/> and the <see cref="ProcessControlBlock"/> for all runningProcesses
 		/// </summary>
 		private ProcessCollection runningProcesses = new ProcessCollection();
 		/// <summary>
@@ -384,7 +384,7 @@ namespace Hanselman.CST352
 		}
 
 		/// <summary>
-		/// Called on a context switch. Copy the <see cref="currentProcess"/>'s <see cref="Process.ProcessControlBlock.registers"/> to the CPU's <see cref="CPU.registers"/> 
+		/// Called on a context switch. Copy the <see cref="currentProcess"/>'s <see cref="ProcessControlBlock.registers"/> to the CPU's <see cref="CPU.registers"/> 
 		/// </summary>
 		private void LoadCPUState()
 		{

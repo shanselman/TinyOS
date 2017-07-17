@@ -8,6 +8,7 @@
 
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <StartupObject>Hanselman.CST352.EntryPoint</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

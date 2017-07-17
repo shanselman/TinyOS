@@ -185,7 +185,7 @@ namespace Hanselman.CST352
 		}
 		
 		/// <summary>
-		/// Sorts the list of <see cref="OS.runningProcesses"/> based on <see cref="Process.ProcessControlBlock.priority"/>
+		/// Sorts the list of <see cref="OS.runningProcesses"/> based on <see cref="ProcessControlBlock.priority"/>
 		/// </summary>
 		public void Sort()
 		{
