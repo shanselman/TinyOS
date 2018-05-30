@@ -16,7 +16,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-906439" />
+    <!-- <PackageReference Include="ILLink.Tasks" Version="0.1.4-preview-906439" /> -->
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0-preview2-final" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0-preview2-final" />
