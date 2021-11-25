@@ -1,1 +1,1 @@
-dotnet netcoreapp2.0/TinyOSCore.dll 512 scott6.txt
+TinyOSCore.exe 512 scott6.txt

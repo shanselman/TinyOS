@@ -1,6 +1,6 @@
 Sample Programs
 -----------------
-* I usually keep these in the ..\bin dir for ease of execution
+* I usually keep these in the ..\bin\Debug\net6.0 dir for ease of execution
 
 * If you want to debug in VS.NET go to the Properties Dialog of the current Project.  Go to "Configuration Properties|Debugging" under Command Line Arguments and add the same args you'd add on the command line.  
 
