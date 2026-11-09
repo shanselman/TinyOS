@@ -6,16 +6,16 @@ notebook is invented: every value comes from the running engine.
 
 ## Build, run, test
 
-Requirements: Windows 11 x64, .NET 10 SDK, Visual Studio 2026 (or its MSBuild), and the
-[`winapp` CLI](https://github.com/microsoft/winappcli).
+Requirements: Windows 11 x64 and the .NET 10 SDK. Visual Studio is optional; the `winapp`
+tooling `dotnet run` needs comes in as a NuGet package.
 
 ```powershell
 # Engine tests (no UI): real execution, observer purity, file safety, reset, completion
 dotnet test tests\TinyOS.Tests
 
-# Build and launch the packaged app (x64 only)
-msbuild src\TinyOS.TimeMachine\TinyOS.TimeMachine.csproj -restore -p:Platform=x64
-winapp run src\TinyOS.TimeMachine\bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
+# Build and launch the packaged app (x64 only). Close any running copy first, or the build
+# can't overwrite its exe. The console stays attached until you close the app.
+dotnet run --project src\TinyOS.TimeMachine -p:Platform=x64
 ```
 
 The WinUI app is intentionally **not** in `TinyOS.sln`, so `dotnet build` and `dotnet test`

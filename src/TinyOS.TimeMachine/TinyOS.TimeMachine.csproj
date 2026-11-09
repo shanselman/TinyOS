@@ -14,6 +14,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TinyOSWindowsAppSdkVersion>2.6.5</TinyOSWindowsAppSdkVersion>
+    <!-- `dotnet run` otherwise adds a DevTools button to the window, which would show on stage. -->
+    <WinAppRunDevTools>off</WinAppRunDevTools>
   </PropertyGroup>
 
   <ItemGroup>
