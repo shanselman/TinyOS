@@ -40,6 +40,7 @@ public sealed partial class MainPage
     private int _renderedTerminalVersion = -1;
     private bool _terminalLayoutChanged = true;
     private SpriteVisual? _glow;
+    private CompositionVisualSurface? _glowSurface;
     private CompositionRoundedRectangleGeometry? _glassClip;
     private bool _effectsOn = true;
     private readonly bool _animations = new UISettings().AnimationsEnabled;
@@ -316,10 +317,12 @@ public sealed partial class MainPage
     {
         if (_glow is not null) return;
         var compositor = ElementCompositionPreview.GetElementVisual(GlowHost).Compositor;
+        // Capture in local coordinates so Viewbox zoom and DPI are applied only once.
+        _glowSurface = compositor.CreateVisualSurface();
+        _glowSurface.SourceVisual = ElementCompositionPreview.GetElementVisual(TerminalText);
+        var mask = compositor.CreateSurfaceBrush(_glowSurface);
+        mask.Stretch = CompositionStretch.Fill;
         var shadow = compositor.CreateDropShadow();
-        var mask = TerminalText.GetAlphaMask();
-        // The mask surface ignores the scene's Viewbox zoom; stretch it so the glow sits exactly on the text.
-        if (mask is CompositionSurfaceBrush surfaceMask) surfaceMask.Stretch = CompositionStretch.Fill;
         shadow.Mask = mask;
         shadow.Color = (Windows.UI.Color)Res("PhosphorColor");
         shadow.BlurRadius = 9f;
@@ -336,14 +339,18 @@ public sealed partial class MainPage
         if (_glow is null) return;
         ElementCompositionPreview.SetElementChildVisual(GlowHost, null);
         _glow.Dispose();
+        _glowSurface?.Dispose();
         _glow = null;
+        _glowSurface = null;
     }
 
     private void UpdateGlowLayout()
     {
-        if (_glow is null || TerminalText.ActualWidth <= 0) return;
+        if (_glow is null || _glowSurface is null || TerminalText.ActualWidth <= 0 || TerminalText.ActualHeight <= 0) return;
         var origin = TerminalText.TransformToVisual(GlowHost).TransformPoint(new Windows.Foundation.Point(0, 0));
-        _glow.Size = new Vector2((float)TerminalText.ActualWidth, (float)TerminalText.ActualHeight);
+        var size = new Vector2((float)TerminalText.ActualWidth, (float)TerminalText.ActualHeight);
+        _glowSurface.SourceSize = size;
+        _glow.Size = size;
         _glow.Offset = new Vector3((float)origin.X, (float)origin.Y, 0);
     }
 
