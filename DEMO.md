@@ -43,7 +43,7 @@ on the solution keep working on any machine.
 | Ctrl+R | Reset (reload the same disk) |
 | F11 / Esc | Enter / leave presentation mode |
 | Ctrl+1 / 2 / 3 | Registers / Memory / Source tab |
-| Tap a disk | Power on with that disk |
+| Tap a disk | Restart with that disk and play the power-on animation |
 | Hex | Show registers in hexadecimal |
 | CRT glass | Curvature, scanlines, and glow on or off |
 | 2002 dumps | Turn on the engine's own memory and register dumps (restarts the machine) |

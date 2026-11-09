@@ -112,7 +112,7 @@
                     </Border>
 
                     <!-- Chin -->
-                    <Grid Margin="44,650,44,22" ColumnSpacing="14" RowSpacing="12">
+                    <Grid Margin="44,646,44,20" ColumnSpacing="14" RowSpacing="12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="236" />
                             <ColumnDefinition Width="Auto" />
@@ -446,19 +446,6 @@
                         </Grid>
                     </Border>
 
-                    <!-- Binder clip -->
-                    <Grid Width="132" Height="74" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,52,0" IsHitTestVisible="False">
-                        <Path Data="M 30,30 C 30,4 50,0 66,0 C 82,0 102,4 102,30" Stroke="#9AA1A8" StrokeThickness="4" />
-                        <Border Height="40" VerticalAlignment="Bottom" CornerRadius="5" BorderBrush="#1C1F22" BorderThickness="1">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Offset="0" Color="#5A6168" />
-                                    <GradientStop Offset="0.45" Color="#2C3136" />
-                                    <GradientStop Offset="1" Color="#1E2226" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
-                    </Grid>
                 </Grid>
             </Canvas>
         </Grid>

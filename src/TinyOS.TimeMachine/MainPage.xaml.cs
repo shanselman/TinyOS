@@ -118,8 +118,7 @@ public sealed partial class MainPage : Page
             _ => Presets.FirstProgram,
         };
         ShowDisk(_preset);
-        // Inserting a disk boots it, like the real thing.
-        StartSession(null, warmUp: _state == MachineState.Off);
+        StartSession(null, warmUp: true);
     }
 
     private void OnHoldSwapChanged(object sender, RoutedEventArgs e)
