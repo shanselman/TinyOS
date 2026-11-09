@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TinyOS.TimeMachine (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TinyOS.TimeMachine (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

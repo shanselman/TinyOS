@@ -58,6 +58,19 @@ namespace Hanselman.CST352
 		/// Contains the <see cref="Process"/> and the <see cref="Process.ProcessControlBlock"/> for all runningProcesses
 		/// </summary>
 		private ProcessCollection runningProcesses = new ProcessCollection();
+
+		/// <summary>
+		/// 2026 Time Machine addition: read-only snapshot of the process list for observers.
+		/// </summary>
+		internal Process[] ProcessesForObservers
+		{
+			get
+			{
+				Process[] list = new Process[runningProcesses.Count];
+				for (int i = 0; i < list.Length; i++) list[i] = runningProcesses[i];
+				return list;
+			}
+		}
 		/// <summary>
 		/// Holds a reference to the current running <see cref="Process"/>
 		/// </summary>
@@ -157,6 +170,8 @@ namespace Hanselman.CST352
 		{
 			while(true)
 			{
+				HostHooks.Observer?.SchedulerPass();
+
 				//
 				// Yank terminated processes
 				//
@@ -181,6 +196,9 @@ namespace Hanselman.CST352
 				if (runningProcesses.Count == 0) 
 				{
 					Console.WriteLine("No Processes");
+					// 2026 Time Machine: when hosted, return so the worker can report completion
+					// instead of the whole process exiting.
+					if (HostHooks.Observer != null) return;
 					if (bool.Parse(EntryPoint.Configuration["PauseOnExit"]) == true)System.Console.ReadLine();
 					System.Environment.Exit(0);
 				}
@@ -222,6 +240,8 @@ namespace Hanselman.CST352
 									
 									//CPU.DumpPhysicalMemory();
 									//CPU.DumpRegisters();
+
+									HostHooks.Observer?.BeforeInstruction();
 
 									try
 									{
@@ -296,6 +316,8 @@ namespace Hanselman.CST352
 												break;
 										}
 									}
+
+									HostHooks.Observer?.AfterInstruction();
 
 									// Have we used up our slice of time?
 									bool bEligible = currentProcess.PCB.clockCycles == 0 || (currentProcess.PCB.clockCycles % currentProcess.PCB.timeQuantum != 0);

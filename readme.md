@@ -4,6 +4,10 @@
 
 ## What is this?
 
+> **Time Machine branch:** this branch adds a WinUI 3 "TinyOS Time Machine" that runs this
+> 2002 engine on a beige CRT with a live notebook of registers, memory, and swap. See
+> [DEMO.md](DEMO.md) to build, run, and demo it.
+
 This was the final project for my CST352-Operating Systems class at [OIT](http://www.oit.edu) (Oregon Institute of Technology).  The requirements, exactly as they were given to me by the teacher, are in [originalassignment.md](originalassignment.md).  The goal of this project was to write a small _virtual_ operating system for an _abstract_ machine that provides a number of basic OS-like services like:
 
 - Virtual Memory, Demand Paging

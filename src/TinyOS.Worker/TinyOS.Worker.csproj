@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Hosts the original 2002 TinyOS engine (compiled from ..\TinyOSCore\*.cs, unchanged apart
+    from the documented observer hooks) and speaks newline-delimited JSON on stdin/stdout.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <StartupObject>TinyOS.Worker.WorkerHost</StartupObject>
+    <RootNamespace>TinyOS.Worker</RootNamespace>
+    <!-- The 2002 code predates nullable, XML doc requirements and several obsoletions. -->
+    <NoWarn>$(NoWarn);CS0618;CS0612;CS1591;CS0162;CS0168;CS0219;SYSLIB0011;SYSLIB0050;SYSLIB0051</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\TinyOSCore\*.cs" Link="Engine\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Sample Programs\*.txt" Link="Programs\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TinyOS.Protocol\TinyOS.Protocol.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.14" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
+  </ItemGroup>
+
+</Project>

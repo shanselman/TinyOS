@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Palette from the Time Machine spec, section 4. -->
+    <Color x:Key="BackdropColor">#171C1B</Color>
+    <Color x:Key="PhosphorColor">#9AF5AD</Color>
+    <SolidColorBrush x:Key="BackdropBrush" Color="#171C1B" />
+    <SolidColorBrush x:Key="CaseShadowBrush" Color="#827C6C" />
+    <SolidColorBrush x:Key="ScreenBrush" Color="#06130C" />
+    <SolidColorBrush x:Key="PhosphorBrush" Color="#9AF5AD" />
+    <SolidColorBrush x:Key="PhosphorDimBrush" Color="#4B8F64" />
+    <SolidColorBrush x:Key="PaperBrush" Color="#F4EBD4" />
+    <SolidColorBrush x:Key="InkBrush" Color="#243E52" />
+    <SolidColorBrush x:Key="PencilBrush" Color="#5F6460" />
+    <SolidColorBrush x:Key="RulingBrush" Color="#BBC5BC" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#B36B22" />
+    <SolidColorBrush x:Key="AccentWashBrush" Color="#F3CF95" />
+    <SolidColorBrush x:Key="KeyTextBrush" Color="#3A362C" />
+
+    <FontFamily x:Key="MonoFont">Cascadia Mono, Consolas</FontFamily>
+    <FontFamily x:Key="HandFont">Ink Free, Segoe Print, Segoe UI</FontFamily>
+    <FontFamily x:Key="LabelFont">Segoe UI</FontFamily>
+
+    <LinearGradientBrush x:Key="CaseBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#F0E9D9" />
+        <GradientStop Offset="0.35" Color="#DFD8C5" />
+        <GradientStop Offset="0.8" Color="#D3CBB7" />
+        <GradientStop Offset="1" Color="#BCB4A0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="BezelBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#9A9381" />
+        <GradientStop Offset="0.12" Color="#BDB5A2" />
+        <GradientStop Offset="1" Color="#E4DDCB" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="KeyFaceBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#F7F1E4" />
+        <GradientStop Offset="1" Color="#D9D1BD" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="KeyFaceHoverBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#FCF8EE" />
+        <GradientStop Offset="1" Color="#E3DCC9" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="KeyFacePressedBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#DCD4C0" />
+        <GradientStop Offset="1" Color="#CEC5AF" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="MetalBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#E4E7EA" />
+        <GradientStop Offset="0.5" Color="#A9AFB5" />
+        <GradientStop Offset="1" Color="#D3D7DB" />
+    </LinearGradientBrush>
+
+    <!-- A beige keyboard-style key: a darker base with a face that travels down when pressed. -->
+    <Style x:Key="KeyButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource KeyTextBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource LabelFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="Padding" Value="16,4" />
+        <Setter Property="MinWidth" Value="112" />
+        <Setter Property="Height" Value="66" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="FocusVisualMargin" Value="-5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="Root" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFaceHoverBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,4,0,1" />
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFacePressedBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="0.42" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border CornerRadius="10" Background="#6E6858" Margin="0,6,0,0" />
+                        <Border x:Name="Face" CornerRadius="10" Margin="0,0,0,5" BorderThickness="1.5"
+                                BorderBrush="#A69E8A" Background="{StaticResource KeyFaceBrush}">
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Foreground="{TemplateBinding Foreground}"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- A latching key with a small LED stripe that lights while it is on. -->
+    <Style x:Key="KeyToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="{StaticResource KeyTextBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource LabelFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Padding" Value="10,2" />
+        <Setter Property="Height" Value="64" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="FocusVisualMargin" Value="-5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="Root" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFaceHoverBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,4,0,1" />
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFacePressedBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="0.42" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,2,0,3" />
+                                        <Setter Target="Lamp.Background" Value="#86EB98" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="CheckedPointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,2,0,3" />
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFaceHoverBrush}" />
+                                        <Setter Target="Lamp.Background" Value="#86EB98" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="CheckedPressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,4,0,1" />
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFacePressedBrush}" />
+                                        <Setter Target="Lamp.Background" Value="#86EB98" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="CheckedDisabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="0.42" />
+                                        <Setter Target="Lamp.Background" Value="#86EB98" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border CornerRadius="10" Background="#6E6858" Margin="0,6,0,0" />
+                        <Border x:Name="Face" CornerRadius="10" Margin="0,0,0,5" BorderThickness="1.5"
+                                BorderBrush="#A69E8A" Background="{StaticResource KeyFaceBrush}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border x:Name="Lamp" Width="28" Height="6" CornerRadius="3" Margin="0,7,0,0"
+                                        Background="#6F6A5C" HorizontalAlignment="Center" />
+                                <ContentPresenter Grid.Row="1" Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Small latching speed keys (a radio group). -->
+    <Style x:Key="SpeedKeyStyle" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource KeyTextBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource LabelFont}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="MinWidth" Value="62" />
+        <Setter Property="Height" Value="48" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="FocusVisualMargin" Value="-4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid x:Name="Root" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Background" Value="{StaticResource KeyFaceHoverBrush}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Face.Margin" Value="0,3,0,1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="0.42" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Target="Lamp.Background" Value="#86EB98" />
+                                        <Setter Target="KeyBase.Background" Value="#4F4A3E" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="KeyBase" CornerRadius="8" Background="#6E6858" Margin="0,4,0,0" />
+                        <Border x:Name="Face" CornerRadius="8" Margin="0,0,0,4" BorderThickness="1.5"
+                                BorderBrush="#A69E8A" Background="{StaticResource KeyFaceBrush}">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
+                                <Border x:Name="Lamp" Width="7" Height="7" CornerRadius="4" Background="#6F6A5C" VerticalAlignment="Center" />
+                                <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- A 3.5-inch floppy disk. Checking it lifts it out of the row. Background is the disk color. -->
+    <Style x:Key="FloppyStyle" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource HandFont}" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="168" />
+        <Setter Property="Background" Value="#2E3238" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="FocusVisualMargin" Value="-4" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid x:Name="Root" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Disk.Margin" Value="0,0,0,5" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Disk.Margin" Value="0,0,0,2" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.Setters>
+                                        <Setter Target="Root.Opacity" Value="0.42" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Target="Lift.Margin" Value="0,0,0,14" />
+                                        <Setter Target="SelectRing.Opacity" Value="1" />
+                                        <Setter Target="DeskShadow.Opacity" Value="0.25" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="DeskShadow" Height="14" CornerRadius="7" Background="#000000" Opacity="0.5"
+                                VerticalAlignment="Bottom" Margin="8,0,8,-6" />
+                        <Grid x:Name="Lift" Height="150" VerticalAlignment="Bottom">
+                            <Grid x:Name="Disk">
+                                <Border x:Name="SelectRing" CornerRadius="8" BorderThickness="3" BorderBrush="#E8A85A" Margin="-6" Opacity="0" />
+                                <Border CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="#15171A" BorderThickness="1.5" />
+                                <Border CornerRadius="5" BorderBrush="#30FFFFFF" BorderThickness="1.5,1.5,0,0" Margin="1" />
+                                <!-- metal shutter with its window -->
+                                <Border Width="78" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="14,0,0,0"
+                                        Background="{StaticResource MetalBrush}" CornerRadius="0,0,2,2">
+                                    <Border Width="17" Height="32" Background="#22262A" CornerRadius="1"
+                                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,13,0" />
+                                </Border>
+                                <!-- paper label, the actual control content -->
+                                <Border Margin="11,60,11,9" Background="#F6F1E3" CornerRadius="2" Padding="7,3,7,3">
+                                    <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" />
+                                </Border>
+                                <Border Width="9" Height="11" Background="#111316" CornerRadius="1"
+                                        HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4,0,0,4" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Notebook page tabs. -->
+    <Style x:Key="PaperTabStyle" TargetType="RadioButton">
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource HandFont}" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="MinWidth" Value="160" />
+        <Setter Property="Height" Value="58" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid x:Name="Root" Background="Transparent">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Hover.Opacity" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Hover.Opacity" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter Target="Tab.Background" Value="#F4EBD4" />
+                                        <Setter Target="Tab.Margin" Value="0,0,0,-3" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Tab" CornerRadius="14,14,0,0" Background="#DCCFAE" BorderBrush="#BDAF8C"
+                                BorderThickness="1.5,1.5,1.5,0" Margin="0,9,0,0" Padding="18,0">
+                            <Grid>
+                                <Border x:Name="Hover" Background="#14243E52" Opacity="0" CornerRadius="12,12,0,0" Margin="-18,0" />
+                                <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- A flat row on paper (process list, frame list, links). -->
+    <Style x:Key="PaperRowStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="UseSystemFocusVisuals" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="Root" Background="{TemplateBinding Background}" CornerRadius="4">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <VisualState.Setters>
+                                        <Setter Target="Hover.Opacity" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <VisualState.Setters>
+                                        <Setter Target="Hover.Opacity" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Hover" Background="#18243E52" Opacity="0" CornerRadius="4" />
+                        <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

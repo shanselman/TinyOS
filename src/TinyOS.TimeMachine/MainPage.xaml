@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="TinyOS_TimeMachine.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{StaticResource BackdropBrush}"
+    IsTabStop="False">
+
+    <!--
+        The whole scene is authored on a 1920 x 1080 stage and scaled uniformly, so the
+        monitor, notebook, and controls keep their relationships at 1280 x 720 or full screen.
+        Everything the machine shows (text, registers, bytes, pages, swap files) comes from the
+        TinyOS worker. The case, glass, paper, and disks are visual fiction.
+    -->
+    <Viewbox Stretch="Uniform">
+        <Grid x:Name="Stage" Width="1920" Height="1080">
+            <Rectangle>
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0.32,0.38" GradientOrigin="0.32,0.38" RadiusX="0.75" RadiusY="0.85">
+                        <GradientStop Offset="0" Color="#2A3330" />
+                        <GradientStop Offset="0.55" Color="#1A201F" />
+                        <GradientStop Offset="1" Color="#101413" />
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Canvas>
+                <!-- Desk surface -->
+                <Rectangle Canvas.Left="0" Canvas.Top="862" Width="1920" Height="218">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="#2A2724" />
+                            <GradientStop Offset="1" Color="#171513" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle Canvas.Left="0" Canvas.Top="862" Width="1920" Height="2" Fill="#3A3632" />
+
+                <!-- Monitor shadow on the desk -->
+                <Ellipse Canvas.Left="300" Canvas.Top="842" Width="640" Height="46" Opacity="0.55">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Offset="0" Color="#E0000000" />
+                            <GradientStop Offset="1" Color="#00000000" />
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+
+                <!-- Stand -->
+                <Path Data="M 531,812 L 691,812 L 724,860 L 498,860 Z" Stroke="#8E8775" StrokeThickness="1.5">
+                    <Path.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Offset="0" Color="#A39C89" />
+                            <GradientStop Offset="1" Color="#CFC7B2" />
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Border Canvas.Left="388" Canvas.Top="852" Width="446" Height="26" CornerRadius="11"
+                        Background="{StaticResource CaseBrush}" BorderBrush="#8E8775" BorderThickness="1.5" />
+
+                <!-- ===================== Monitor ===================== -->
+                <Grid x:Name="Monitor" Canvas.Left="56" Canvas.Top="24" Width="1110" Height="792">
+                    <Border CornerRadius="30" Background="#000000" Opacity="0.35" Margin="10,16,-8,-10" />
+                    <Border x:Name="Case" CornerRadius="28" Background="{StaticResource CaseBrush}"
+                            BorderBrush="{StaticResource CaseShadowBrush}" BorderThickness="2" />
+                    <Border CornerRadius="26" BorderBrush="#99FFFFFF" BorderThickness="2.5,2.5,0,0" Margin="2" />
+                    <Border CornerRadius="26" BorderBrush="#2E000000" BorderThickness="0,0,3,4" Margin="2" />
+
+                    <!-- Bezel (recessed) -->
+                    <Border x:Name="Bezel" Margin="36,32,36,0" Height="602" VerticalAlignment="Top" CornerRadius="22"
+                            Background="{StaticResource BezelBrush}" BorderBrush="#857E6B" BorderThickness="2">
+                        <!-- Glass -->
+                        <Grid x:Name="Glass" Margin="22" Background="{StaticResource ScreenBrush}" CornerRadius="34">
+                            <Grid x:Name="ScreenContent" Margin="38,30,38,30">
+                                <Canvas x:Name="GlowHost" IsHitTestVisible="False" />
+                                <TextBlock x:Name="TerminalText"
+                                           FontFamily="{StaticResource MonoFont}" FontSize="24"
+                                           LineHeight="30" LineStackingStrategy="BlockLineHeight"
+                                           Foreground="{StaticResource PhosphorBrush}"
+                                           TextWrapping="NoWrap" VerticalAlignment="Bottom"
+                                           IsTextSelectionEnabled="False"
+                                           AutomationProperties.Name="TinyOS screen output" />
+                                <TextBlock x:Name="MeasureText" Text="0000000000" FontFamily="{StaticResource MonoFont}"
+                                           FontSize="24" Opacity="0" IsHitTestVisible="False"
+                                           HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            </Grid>
+                            <Path x:Name="Scanlines" IsHitTestVisible="False" Fill="#000000" Opacity="0.22" />
+                            <Rectangle x:Name="Vignette" IsHitTestVisible="False">
+                                <Rectangle.Fill>
+                                    <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.45" RadiusX="0.68" RadiusY="0.72">
+                                        <GradientStop Offset="0" Color="#00000000" />
+                                        <GradientStop Offset="0.72" Color="#10000000" />
+                                        <GradientStop Offset="1" Color="#B0000000" />
+                                    </RadialGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle x:Name="Reflection" IsHitTestVisible="False">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0.75,1">
+                                        <GradientStop Offset="0" Color="#1EFFFFFF" />
+                                        <GradientStop Offset="0.32" Color="#08FFFFFF" />
+                                        <GradientStop Offset="0.33" Color="#00FFFFFF" />
+                                        <GradientStop Offset="1" Color="#00FFFFFF" />
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle x:Name="WarmUp" IsHitTestVisible="False" Fill="{StaticResource PhosphorBrush}" Opacity="0" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Chin -->
+                    <Grid Margin="44,650,44,22" ColumnSpacing="14" RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="236" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="66" />
+                            <RowDefinition Height="48" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Product label -->
+                        <StackPanel VerticalAlignment="Center" Spacing="0">
+                            <TextBlock Text="TinyOS Time Machine" FontFamily="Segoe UI" FontWeight="Bold" FontSize="22" Foreground="#5B5546" CharacterSpacing="20" />
+                            <TextBlock Text="CST352 · VIRTUAL OS · 2002" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="13" Foreground="#7D7663" CharacterSpacing="120" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="14">
+                            <Button x:Name="RunPauseButton" Style="{StaticResource KeyButtonStyle}" MinWidth="150" Click="OnRunPause"
+                                    ToolTipService.ToolTip="Run or pause the machine (Space)">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <FontIcon x:Name="RunPauseIcon" Glyph="&#xE768;" FontSize="18" />
+                                    <TextBlock x:Name="RunPauseLabel" Text="Run" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="StepButton" Style="{StaticResource KeyButtonStyle}" Click="OnStep"
+                                    ToolTipService.ToolTip="Run exactly one instruction (F10)">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <FontIcon Glyph="&#xE893;" FontSize="18" />
+                                    <TextBlock Text="Step" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="ResetButton" Style="{StaticResource KeyButtonStyle}" Click="OnReset"
+                                    ToolTipService.ToolTip="Restart this disk from the beginning (Ctrl+R)">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <FontIcon Glyph="&#xE72C;" FontSize="18" />
+                                    <TextBlock Text="Reset" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="14" HorizontalAlignment="Right">
+                            <Ellipse x:Name="PowerLed" Width="16" Height="16" VerticalAlignment="Center" Fill="#3F3B32" Stroke="#6E6858" StrokeThickness="1.5" />
+                            <Button x:Name="PowerButton" Style="{StaticResource KeyButtonStyle}" Click="OnPower" MinWidth="128"
+                                    AutomationProperties.Name="Power"
+                                    ToolTipService.ToolTip="Boot or switch off this simulated machine (never Windows)">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <FontIcon Glyph="&#xE7E8;" FontSize="18" />
+                                    <TextBlock Text="Power" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Host status window: never part of the guest's screen output. -->
+                        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="#0C1A12" BorderBrush="#7A7462" BorderThickness="2" CornerRadius="6" Padding="16,0">
+                            <TextBlock x:Name="StatusText" VerticalAlignment="Center" FontFamily="{StaticResource MonoFont}" FontSize="19"
+                                       Foreground="#7FD493" TextTrimming="CharacterEllipsis"
+                                       AutomationProperties.LiveSetting="Polite" Text="OFF · choose a disk, then press Power" />
+                        </Border>
+
+                        <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                            <TextBlock Text="speed" VerticalAlignment="Center" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="14" Foreground="#6E6858" Margin="0,0,4,0" />
+                            <RadioButton x:Name="Speed1" GroupName="Speed" Style="{StaticResource SpeedKeyStyle}" Content="1" Tag="1"
+                                         Checked="OnSpeedChecked" AutomationProperties.Name="1 instruction per second" ToolTipService.ToolTip="1 instruction per second" />
+                            <RadioButton x:Name="Speed5" GroupName="Speed" Style="{StaticResource SpeedKeyStyle}" Content="5" Tag="5" IsChecked="True"
+                                         Checked="OnSpeedChecked" AutomationProperties.Name="5 instructions per second" ToolTipService.ToolTip="5 instructions per second" />
+                            <RadioButton x:Name="Speed20" GroupName="Speed" Style="{StaticResource SpeedKeyStyle}" Content="20" Tag="20"
+                                         Checked="OnSpeedChecked" AutomationProperties.Name="20 instructions per second" ToolTipService.ToolTip="20 instructions per second" />
+                            <RadioButton x:Name="SpeedFast" GroupName="Speed" Style="{StaticResource SpeedKeyStyle}" Content="Fast" Tag="0"
+                                         Checked="OnSpeedChecked" AutomationProperties.Name="As fast as possible" ToolTipService.ToolTip="As fast as the worker can go (the notebook samples every 33 ms)" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <!-- ===================== Desk: disks and switches ===================== -->
+                <StackPanel Canvas.Left="70" Canvas.Top="882" Orientation="Horizontal" Spacing="22">
+                    <RadioButton x:Name="DiskA" GroupName="Disk" Style="{StaticResource FloppyStyle}" Background="#2C4260"
+                                 Checked="OnDiskChecked" IsChecked="True"
+                                 AutomationProperties.Name="Disk A: My old code is still here"
+                                 ToolTipService.ToolTip="scott1.txt on its own">
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="A" FontSize="30" FontWeight="Bold" Foreground="#B0412F" />
+                            <TextBlock Grid.Column="1" Text="My old code is still here" TextWrapping="Wrap" FontSize="16" LineHeight="19" Margin="0,5,0,0" />
+                        </Grid>
+                    </RadioButton>
+                    <RadioButton x:Name="DiskSmall" GroupName="Disk" Style="{StaticResource FloppyStyle}" Background="#7A312C"
+                                 Checked="OnDiskChecked"
+                                 AutomationProperties.Name="Disk B: Small RAM, 128 bytes"
+                                 ToolTipService.ToolTip="Six programs, the original 128 bytes of physical RAM">
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="B" FontSize="30" FontWeight="Bold" Foreground="#B0412F" />
+                            <TextBlock Grid.Column="1" Text="Small RAM 128 bytes" TextWrapping="Wrap" FontSize="16" LineHeight="19" Margin="0,5,0,0" />
+                        </Grid>
+                    </RadioButton>
+                    <RadioButton x:Name="DiskComfortable" GroupName="Disk" Style="{StaticResource FloppyStyle}" Background="#3C5A3E"
+                                 Checked="OnDiskChecked"
+                                 AutomationProperties.Name="Disk B: Comfortable RAM, 5760 bytes"
+                                 ToolTipService.ToolTip="The same six programs with enough RAM that nothing swaps">
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="B" FontSize="30" FontWeight="Bold" Foreground="#B0412F" />
+                            <TextBlock Grid.Column="1" Text="Comfortable RAM 5760 bytes" TextWrapping="Wrap" FontSize="16" LineHeight="19" Margin="0,5,0,0" />
+                        </Grid>
+                    </RadioButton>
+                    <RadioButton x:Name="DiskC" GroupName="Disk" Style="{StaticResource FloppyStyle}" Background="#2A2D31"
+                                 Checked="OnDiskChecked"
+                                 AutomationProperties.Name="Disk C: Taking turns"
+                                 ToolTipService.ToolTip="testRegisters.bat: scott1.txt and scott3.txt share one CPU">
+                        <Grid ColumnSpacing="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="C" FontSize="30" FontWeight="Bold" Foreground="#B0412F" />
+                            <TextBlock Grid.Column="1" Text="Taking turns two programs" TextWrapping="Wrap" FontSize="16" LineHeight="19" Margin="0,5,0,0" />
+                        </Grid>
+                    </RadioButton>
+                </StackPanel>
+
+                <Grid Canvas.Left="772" Canvas.Top="892" Width="396" ColumnSpacing="12" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ToggleButton x:Name="HoldSwapToggle" Style="{StaticResource KeyToggleStyle}" HorizontalAlignment="Stretch"
+                                  Checked="OnHoldSwapChanged" Unchecked="OnHoldSwapChanged"
+                                  AutomationProperties.Name="Hold on next swap"
+                                  ToolTipService.ToolTip="Pause right after the next instruction that writes or reads a swap file">
+                        <TextBlock Text="Hold on swap" TextAlignment="Center" />
+                    </ToggleButton>
+                    <ToggleButton x:Name="EffectsToggle" Grid.Column="1" Style="{StaticResource KeyToggleStyle}" HorizontalAlignment="Stretch"
+                                  IsChecked="True" Checked="OnEffectsChanged" Unchecked="OnEffectsChanged"
+                                  AutomationProperties.Name="CRT effects"
+                                  ToolTipService.ToolTip="Glass, scanlines and glow. Off gives a plain rectangular screen.">
+                        <TextBlock Text="CRT glass" TextAlignment="Center" />
+                    </ToggleButton>
+                    <ToggleButton x:Name="LegacyDumpsToggle" Grid.Column="2" Style="{StaticResource KeyToggleStyle}" HorizontalAlignment="Stretch"
+                                  Checked="OnLegacyDumpsChanged" Unchecked="OnLegacyDumpsChanged"
+                                  AutomationProperties.Name="2002 dumps"
+                                  ToolTipService.ToolTip="Restart with the original register and memory dumps printed to the screen">
+                        <TextBlock Text="2002 dumps" TextAlignment="Center" />
+                    </ToggleButton>
+                    <ToggleButton x:Name="HexToggle" Grid.Row="1" Style="{StaticResource KeyToggleStyle}" HorizontalAlignment="Stretch"
+                                  Checked="OnHexChanged" Unchecked="OnHexChanged"
+                                  AutomationProperties.Name="Hexadecimal registers"
+                                  ToolTipService.ToolTip="Show register values in hexadecimal (the values are unchanged)">
+                        <TextBlock Text="Hex" TextAlignment="Center" />
+                    </ToggleButton>
+                    <Button x:Name="TranscriptButton" Grid.Row="1" Grid.Column="1" Style="{StaticResource KeyButtonStyle}"
+                            HorizontalAlignment="Stretch" MinWidth="0" FontSize="16" Height="64" Click="OnTranscript"
+                            ToolTipService.ToolTip="Plain, copyable text of everything TinyOS printed">
+                        <TextBlock Text="Transcript" />
+                    </Button>
+                    <Button x:Name="AboutButton" Grid.Row="1" Grid.Column="2" Style="{StaticResource KeyButtonStyle}"
+                            HorizontalAlignment="Stretch" MinWidth="0" FontSize="16" Height="64" Click="OnAbout"
+                            ToolTipService.ToolTip="What is real, what is new, and which versions are running">
+                        <TextBlock Text="Provenance" />
+                    </Button>
+                </Grid>
+
+                <!-- ===================== Notebook ===================== -->
+                <Grid x:Name="Notebook" Canvas.Left="1222" Canvas.Top="18" Width="664" Height="1040" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <RotateTransform Angle="-0.7" />
+                    </Grid.RenderTransform>
+
+                    <Border Margin="12,64,-10,-8" CornerRadius="6" Background="#000000" Opacity="0.28" />
+                    <Border Margin="6,58,-4,-3" CornerRadius="5" Background="#000000" Opacity="0.22" />
+
+                    <StackPanel Orientation="Horizontal" Spacing="6" Margin="40,0,0,0" VerticalAlignment="Top">
+                        <RadioButton x:Name="TabRegisters" GroupName="NotebookTab" Style="{StaticResource PaperTabStyle}" Content="Registers"
+                                     IsChecked="True" Checked="OnTabChecked" ToolTipService.ToolTip="Ctrl+1" />
+                        <RadioButton x:Name="TabMemory" GroupName="NotebookTab" Style="{StaticResource PaperTabStyle}" Content="Memory"
+                                     Checked="OnTabChecked" ToolTipService.ToolTip="Ctrl+2" />
+                        <RadioButton x:Name="TabSource" GroupName="NotebookTab" Style="{StaticResource PaperTabStyle}" Content="Source"
+                                     Checked="OnTabChecked" ToolTipService.ToolTip="Ctrl+3" />
+                    </StackPanel>
+
+                    <Border x:Name="Paper" Margin="0,56,0,0" Background="{StaticResource PaperBrush}" BorderBrush="#D3C6A6" BorderThickness="1" CornerRadius="3">
+                        <Grid>
+                            <Path x:Name="Ruling" IsHitTestVisible="False" Stroke="{StaticResource RulingBrush}" StrokeThickness="1.2" />
+                            <Rectangle Width="2" HorizontalAlignment="Left" Margin="66,0,0,0" Fill="#D9A79B" Opacity="0.9" IsHitTestVisible="False" />
+
+                            <!-- Registers page -->
+                            <Grid x:Name="RegistersPage" Margin="84,22,26,20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="62" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="What's happening inside?" FontFamily="{StaticResource HandFont}" FontSize="40" Foreground="{StaticResource InkBrush}" VerticalAlignment="Bottom" />
+                                <StackPanel Grid.Row="1" Margin="0,8,0,10">
+                                    <TextBlock x:Name="DiskTitle" FontFamily="{StaticResource HandFont}" FontSize="22" Foreground="{StaticResource InkBrush}" />
+                                    <TextBlock x:Name="DiskCaption" FontFamily="{StaticResource HandFont}" FontSize="18" Foreground="{StaticResource PencilBrush}" TextWrapping="Wrap" MaxLines="2" TextTrimming="WordEllipsis" />
+                                </StackPanel>
+                                <TextBlock x:Name="CpuLine" Grid.Row="2" FontFamily="Segoe UI" FontSize="23" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}" TextWrapping="Wrap" Margin="0,0,0,6" />
+                                <Grid Grid.Row="3" ColumnSpacing="10" Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="58" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="last" FontFamily="{StaticResource HandFont}" FontSize="22" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="LastLine" Grid.Column="1" FontFamily="{StaticResource MonoFont}" FontSize="20" Foreground="{StaticResource InkBrush}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="4" ColumnSpacing="10" Margin="0,2,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="58" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="next" FontFamily="{StaticResource HandFont}" FontSize="22" Foreground="{StaticResource InkBrush}" VerticalAlignment="Center" />
+                                    <TextBlock x:Name="NextLine" Grid.Column="1" FontFamily="{StaticResource MonoFont}" FontSize="20" Foreground="{StaticResource InkBrush}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                </Grid>
+                                <Grid Grid.Row="5" Margin="0,6,0,4">
+                                    <TextBlock x:Name="RegisterHeading" FontFamily="{StaticResource HandFont}" FontSize="23" Foreground="{StaticResource InkBrush}" Text="CPU registers" />
+                                    <Button x:Name="FollowCpuButton" Style="{StaticResource PaperRowStyle}" HorizontalAlignment="Right" Visibility="Collapsed" Click="OnFollowCpu">
+                                        <TextBlock Text="← back to the CPU" FontFamily="{StaticResource HandFont}" FontSize="19" Foreground="{StaticResource AccentBrush}" />
+                                    </Button>
+                                </Grid>
+                                <Grid x:Name="RegisterGrid" Grid.Row="6" ColumnSpacing="8" RowSpacing="2" />
+                                <TextBlock x:Name="MarginNotes" Grid.Row="7" Margin="0,8,0,0" FontFamily="{StaticResource HandFont}" FontSize="22" Foreground="{StaticResource AccentBrush}" TextWrapping="Wrap" MaxLines="3" />
+                                <StackPanel Grid.Row="8" Margin="0,10,0,0" Spacing="2">
+                                    <TextBlock Text="Processes (tap one to read its saved state)" FontFamily="{StaticResource HandFont}" FontSize="21" Foreground="{StaticResource InkBrush}" />
+                                    <StackPanel x:Name="ProcessList" Spacing="0" />
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Memory page -->
+                            <Grid x:Name="MemoryPage" Margin="84,22,26,20" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="62" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Where does everything live?" FontFamily="{StaticResource HandFont}" FontSize="40" Foreground="{StaticResource InkBrush}" VerticalAlignment="Bottom" />
+                                <Grid Grid.Row="1" Margin="0,8,0,0">
+                                    <TextBlock x:Name="RamSummary" FontFamily="Segoe UI" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource InkBrush}" VerticalAlignment="Center" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="2">
+                                        <Button x:Name="FramesPrev" Style="{StaticResource PaperRowStyle}" Click="OnFramesPrev" AutomationProperties.Name="Previous frames">
+                                            <TextBlock Text="‹" FontSize="26" Foreground="{StaticResource InkBrush}" Margin="6,-4,6,0" />
+                                        </Button>
+                                        <TextBlock x:Name="FramesPageText" FontFamily="{StaticResource HandFont}" FontSize="18" Foreground="{StaticResource PencilBrush}" VerticalAlignment="Center" />
+                                        <Button x:Name="FramesNext" Style="{StaticResource PaperRowStyle}" Click="OnFramesNext" AutomationProperties.Name="Next frames">
+                                            <TextBlock Text="›" FontSize="26" Foreground="{StaticResource InkBrush}" Margin="6,-4,6,0" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Grid.Row="2" FontFamily="{StaticResource HandFont}" FontSize="16" Foreground="{StaticResource PencilBrush}" TextWrapping="Wrap" Margin="0,2,0,6"
+                                           Text="Physical frames, decimal bytes ('-' is zero, like the 2002 dump). Amber = changed by the last report. ✎ = dirty page." />
+                                <StackPanel x:Name="FrameList" Grid.Row="3" Spacing="1" />
+                                <Border x:Name="FrameDetail" Grid.Row="4" Margin="0,10,0,0" Padding="12,8" CornerRadius="4" BorderThickness="1.5" BorderBrush="#9FB0A6" Background="#0A243E52">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock x:Name="FrameDetailTitle" FontFamily="{StaticResource HandFont}" FontSize="21" Foreground="{StaticResource InkBrush}" TextWrapping="Wrap" />
+                                        <Grid x:Name="FrameDetailBytes" RowSpacing="2" ColumnSpacing="0" />
+                                    </StackPanel>
+                                </Border>
+                                <StackPanel Grid.Row="5" Margin="0,12,0,4">
+                                    <TextBlock Text="Swap: the disk" FontFamily="{StaticResource HandFont}" FontSize="25" Foreground="{StaticResource InkBrush}" />
+                                    <TextBlock x:Name="SwapSummary" FontFamily="{StaticResource HandFont}" FontSize="17" Foreground="{StaticResource PencilBrush}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Grid Grid.Row="6" ColumnSpacing="14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="268" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel x:Name="SwapEvents" Spacing="3" />
+                                    <Grid x:Name="TripCard" Grid.Column="1" Visibility="Collapsed" RenderTransformOrigin="0.5,0.5">
+                                        <Grid.RenderTransform>
+                                            <CompositeTransform x:Name="TripCardTransform" Rotation="1.4" />
+                                        </Grid.RenderTransform>
+                                        <Border Margin="5,7,-5,-7" CornerRadius="3" Background="#000000" Opacity="0.18" />
+                                        <Border CornerRadius="3" Background="#FFFDF5" BorderBrush="#D8D0BC" BorderThickness="1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Rectangle Height="2" Fill="#D98C7E" VerticalAlignment="Top" Margin="0,34,0,0" />
+                                                <TextBlock x:Name="TripFileName" Margin="10,6,10,0" FontFamily="{StaticResource MonoFont}" FontSize="17" FontWeight="Bold" Foreground="{StaticResource InkBrush}" />
+                                                <TextBlock x:Name="TripCaption" Grid.Row="1" Margin="10,8,10,2" FontFamily="{StaticResource HandFont}" FontSize="15" Foreground="{StaticResource AccentBrush}" TextWrapping="Wrap" />
+                                                <ScrollViewer Grid.Row="2" Margin="6,0,4,6" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                                    <TextBlock x:Name="TripXml" FontFamily="{StaticResource MonoFont}" FontSize="12" Foreground="#3B4A55" IsTextSelectionEnabled="True" />
+                                                </ScrollViewer>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+
+                            <!-- Source page -->
+                            <Grid x:Name="SourcePage" Margin="84,22,26,20" Visibility="Collapsed">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="62" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="The code, as written in 2002" FontFamily="{StaticResource HandFont}" FontSize="40" Foreground="{StaticResource InkBrush}" VerticalAlignment="Bottom" />
+                                <StackPanel x:Name="SourcePidButtons" Grid.Row="1" Orientation="Horizontal" Spacing="4" Margin="0,10,0,0" />
+                                <TextBlock x:Name="SourceHeading" Grid.Row="2" Margin="0,6,0,8" FontFamily="{StaticResource HandFont}" FontSize="20" Foreground="{StaticResource PencilBrush}" TextWrapping="Wrap" />
+                                <ScrollViewer x:Name="SourceScroller" Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                    <StackPanel x:Name="SourceList" Spacing="0" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Binder clip -->
+                    <Grid Width="132" Height="74" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,52,0" IsHitTestVisible="False">
+                        <Path Data="M 30,30 C 30,4 50,0 66,0 C 82,0 102,4 102,30" Stroke="#9AA1A8" StrokeThickness="4" />
+                        <Border Height="40" VerticalAlignment="Bottom" CornerRadius="5" BorderBrush="#1C1F22" BorderThickness="1">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Offset="0" Color="#5A6168" />
+                                    <GradientStop Offset="0.45" Color="#2C3136" />
+                                    <GradientStop Offset="1" Color="#1E2226" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Canvas>
+        </Grid>
+    </Viewbox>
+</Page>

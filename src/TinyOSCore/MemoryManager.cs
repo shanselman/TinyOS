@@ -33,6 +33,7 @@
 //
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
@@ -86,7 +87,10 @@ namespace Hanselman.CST352
 			_pageTable = new ArrayList((int)addressablepages);
 
 			// Delete all our Swap Files
-			foreach (string f in Directory.GetFiles(".","*.xml"))
+			// 2026 Time Machine safety change: the 2002 code deleted every *.xml in the
+			// current directory. Swap files are always named page{n}-{addr}.xml, so only
+			// those are removed now.
+			foreach (string f in Directory.GetFiles(".","page*.xml"))
 				File.Delete(f);
 
 			// For all off addressable memory...
@@ -765,6 +769,7 @@ namespace Hanselman.CST352
 		/// <param name="victim">The <see cref="MemoryPage"/> to be swapped</param>
 		public void SwapOut(MemoryPage victim)
 		{
+			bool wroteSwapFile = victim.isDirty;
 			if (victim.isDirty)
 			{
 
@@ -800,6 +805,8 @@ namespace Hanselman.CST352
 				fs.Close();
 			}
 			victim.isValid = false;
+
+			HostHooks.Observer?.PageSwappedOut(victim, wroteSwapFile);
 		}
 
 		/// <summary>
@@ -810,8 +817,10 @@ namespace Hanselman.CST352
 		{
 			// Generate a filename based on address and page number
 			string filename = System.Environment.CurrentDirectory + "/page" + winner.pageNumber + "-" + winner.addrVirtual + ".xml";
+			bool readSwapFile = false;
 			if (File.Exists(filename) && winner.isValid == false)
 			{
+				readSwapFile = true;
 				//BinaryFormatter ser = new BinaryFormatter();
 				//Stream reader = new FileStream(filename, FileMode.Open);
 
@@ -845,6 +854,22 @@ namespace Hanselman.CST352
 			// We are now in memory and we were involved in Page Fault
 			winner.isValid = true;
 			winner.pageFaults++;
+
+			HostHooks.Observer?.PageSwappedIn(winner, readSwapFile);
+		}
+
+		/// <summary>
+		/// 2026 Time Machine addition: read-only view of the page table for observers.
+		/// Reading this list does not translate addresses or touch paging metadata.
+		/// </summary>
+		internal IReadOnlyList<MemoryPage> PageTableForObservers
+		{
+			get
+			{
+				var pages = new List<MemoryPage>(_pageTable.Count);
+				foreach (MemoryPage page in _pageTable) pages.Add(page);
+				return pages;
+			}
 		}
 
 		/// <summary>

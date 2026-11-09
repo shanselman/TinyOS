@@ -127,7 +127,7 @@ namespace Hanselman.CST352
 		/// <summary>
 		/// Prints the static informatonal header
 		/// </summary>
-		private static void PrintHeader()
+		internal static void PrintHeader()
 		{
 			Console.WriteLine("Scott's CST352 Virtual Operating System");
 			Console.WriteLine(System.Reflection.Assembly.GetExecutingAssembly().FullName);
